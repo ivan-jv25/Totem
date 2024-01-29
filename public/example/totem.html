@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Totem de Auto Servicio</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+
+    <link rel="stylesheet" href="asset/style.css">
+
+</head>
+
+<body>
+
+    <header class="miTexto">Desarrollado por One Code "www.onecode.com"</header>
+    
+    <section>
+
+      
+
+        
+        <button class="floating-button" onclick="modal_carro()">
+            <img src="asset/img/carro.png" alt="Carro de compras" style="width: 80%; height: 80%;">
+            <span class="counter-circle" id="counter-circle">0</span> <!-- Ajusta el número según sea necesario -->
+        </button>
+
+
+        <!-- Inicio Slider -->
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="asset/img/01.jpg" alt="Third slide">
+                    <a href="pagina1.html" class="btn-overlay">
+                        <div class="btn-content">"OFERTA" en Desayunos</div>
+                    </a>
+                </div>
+                <div class="carousel-item active">
+                    <img class="d-block w-100" src="asset/img/1.2.jpg" alt="First slide">
+                    <a href="pagina1.html" class="btn-overlay">
+                        <div class="btn-content">"OFERTA" en Dulces</div>
+                    </a>
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="asset/img/1.3.jpg" alt="Second slide">
+                    <a href="pagina1.html" class="btn-overlay">
+                        <div class="btn-content">"OFERTA" en Cafetería</div>
+                    </a>
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="asset/img/1.4.jpg" alt="Third slide">
+                    <a href="pagina1.html" class="btn-overlay">
+                        <div class="btn-content">Todas las "OFERTA"</div>
+                    </a>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+        <!-- Fin Slider -->
+
+        
+        <div class="container-xl mt-3 px-0">
+            <div class="row mx-0" id="div_lista_productos">
+            
+              
+
+            </div>
+        </div>
+                    
+            
+
+
+
+
+    </section>
+
+       
+
+
+    <section>
+        <div class="categories">
+            <button class="otra-categoria-btn">Bebidas</button>
+            <button class="categoria-destacada-btn">Jugos</button>
+            <button class="otra-categoria-btn">Emparedados</button>
+            <button class="categoria-destacada-btn">Pasteleria</button>
+            <button class="otra-categoria-btn">Platos</button>
+            <button class="categoria-destacada-btn">Helados</button>
+        </div>
+    </section>
+
+
+    <div class="modal fade" id="modalDetalles" tabindex="-1" role="dialog" aria-labelledby="modalDetallesLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content mt-5">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="label_modal_nombre">Nombre del Producto 2</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="col-md-12">
+                        <div class="producto box-shadow pb-3">
+                            <img id="img_modal_producto">
+                            
+                            <p id="p_modal_precio">Precio: $25.00</p>
+                            <div class="mx-4">
+                                <a id="btn_modal_agregar_producto" class="btn btn-block  btn-color ">Agregar al Carro!</a>
+                            </div>
+                            
+                        </div>
+                    </div>
+    
+
+                </div>
+                <div class="modal-footer py-1">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="carritoModal" tabindex="-1" role="dialog" aria-labelledby="carritoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content" style="background: #f2ebeb;">
+                <div class="modal-header" style="background-color:#e89291; color: white;">
+                    <h5 class="modal-title" id="carritoModalLabel">Productos en el Carrito</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body " style="max-height: 400px; overflow-y: auto; ">
+                     
+                    <div class="table-responsive " style="overflow-x: hidden; background-color: white; border-radius: 10px;">
+                        <table class="table product-overview">
+                            <thead>
+                                <!-- start row -->
+                                <tr>
+                                    
+                                    <th colspan="2" class="text-center">Producto</th>
+                                    
+                                    <th >Cantidad</th>
+                                    <th  style="text-align:center">Total</th>
+                                    <th  style="text-align:center">Action</th>
+                                </tr> <!-- end row -->
+                            </thead>
+                            <tbody id="tbody_modal_carrito">
+                                <!-- start row -->
+                                <tr>
+                                    <td><img class="mt-1" src="asset/img/02.jpg" alt="iMac" width="80"></td>
+                                    <td class="py-1" >
+                                        <h5 class="font-500 mt-4">Rounded Chair ($153)</h5>
+                                    </td>
+                                    
+                                    <td>
+                                        <div class="row mt-4">
+
+                                            <div class="counter">
+                                                <div class="col-md-4">
+                                                    <button id="decrease">-</button>
+
+                                                </div>
+                                                <div class="col-md-4">
+                                                    
+                                                    <span id="number">3</span>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    
+                                                    <button id="increase">+</button>
+                                                </div>
+                                              </div>
+                                        </div>
+                                    </td>
+                                    <td align="center">
+                                        <div class="row mt-4 justify-content-center align-items-center">
+                                            <strong class="">$1000</strong>
+                                        </div>
+                                    </td>
+                                    <td align="center"> 
+                                        <div class="row mt-4 justify-content-center align-items-center">
+                                            <button class=""><i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr> <!-- end row -->
+
+
+                                
+
+                            </tbody>
+                        </table>
+                        
+                       
+                    </div>
+                </div>
+                <div class="modal-body" >
+                    <div class="row mx-1 py-3" style="overflow-x: hidden; background-color: white; border-radius: 10px;">
+                        <div class="col-md-9 text-right">
+                            <h5>Total a Comprar:</h5>
+                        </div>
+                        <div class="col-md-3 text-right">
+                            <!-- Aquí se mostrará el monto total calculado dinámicamente -->
+                            <h5 id="monto_total_modal" class="mr-5">$20.00</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Realizar Compra</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="asset/app.js"></script>
+
+
+
+
+</body>
+
+</html>

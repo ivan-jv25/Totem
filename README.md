@@ -49,3 +49,8 @@ Esto enviará tus cambios al repositorio remoto en GitHub, específicamente a la
 - La aplicación deberá ser desarrollada siguiendo las mejores prácticas de Laravel y PHP.
 - Se deberá implementar la lógica necesaria para manejar adecuadamente los errores y excepciones que puedan surgir durante el consumo de la API.
 - Se recomienda realizar pruebas exhaustivas para garantizar el correcto funcionamiento de todas las funcionalidades implementadas.
+
+## Tips Adicionales
+- **Consumo de API:** Para consumir la API, se recomienda utilizar la librería GuzzleHttp, ampliamente utilizada en proyectos PHP para realizar peticiones HTTP de manera sencilla y eficiente.
+- **Login con Laravel Breeze:** Laravel Breeze es una excelente opción para generar un sistema de autenticación básico en Laravel de manera rápida y sencilla. Se puede utilizar para implementar el login de usuarios en la aplicación de forma eficiente.
+
