@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Familia extends Model
+class SubFamilia extends Model
 {
     use HasFactory;
 
-    protected $table = 'familias';
+    protected $table = 'sub_familias';
 
     protected $fillable = [
+        'id_sub_familia',
         'id_familia',
         'nombre',
         'estado',
