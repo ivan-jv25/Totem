@@ -30,4 +30,7 @@ Route::get('api/producto/paginado', [App\Http\Controllers\HomeController::class,
 Route::get('api/producto', [App\Http\Controllers\HomeController::class, 'probar_api_producto'])->name('api.producto');
 Route::get('api/generar/venta', [App\Http\Controllers\HomeController::class, 'probar_api_generar_venta'])->name('api.generar.venta');
 
+
+Route::get('store/familia', [App\Http\Controllers\HomeController::class, 'store_familia'])->name('store.familia');
+
 require __DIR__.'/auth.php';

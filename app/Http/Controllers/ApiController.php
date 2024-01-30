@@ -70,7 +70,6 @@ class ApiController extends Controller
             ]);
 
             $resultado = $response->getBody()->getContents();
-            $resultado = json_decode($resultado);
 
         } catch (\Throwable $th) {
 
@@ -99,7 +98,6 @@ class ApiController extends Controller
             ]);
 
             $resultado = $response->getBody()->getContents();
-            $resultado = json_decode($resultado);
 
         } catch (\Throwable $th) {
 
@@ -128,7 +126,6 @@ class ApiController extends Controller
             ]);
 
             $resultado = $response->getBody()->getContents();
-            $resultado = json_decode($resultado);
 
         } catch (\Throwable $th) {
 
@@ -157,7 +154,6 @@ class ApiController extends Controller
             ]);
 
             $resultado = $response->getBody()->getContents();
-            $resultado = json_decode($resultado);
 
         } catch (\Throwable $th) {
 
@@ -193,7 +189,6 @@ class ApiController extends Controller
             ]);
 
             $resultado = $response->getBody()->getContents();
-            $resultado = json_decode($resultado);
 
         } catch (\Throwable $th) {
 
@@ -222,7 +217,6 @@ class ApiController extends Controller
             ]);
 
             $resultado = $response->getBody()->getContents();
-            $resultado = json_decode($resultado);
 
         } catch (\Throwable $th) {
 
@@ -309,7 +303,6 @@ class ApiController extends Controller
             ]);
 
             $resultado = $response->getBody()->getContents();
-            $resultado = json_decode($resultado);
 
         } catch (\Throwable $th) {
 

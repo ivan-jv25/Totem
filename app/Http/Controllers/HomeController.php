@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Familia;
+use DB;
 
 class HomeController extends Controller
 {
@@ -15,8 +17,7 @@ class HomeController extends Controller
 
     public function probar_api_familia() {
         $familia = \App\Http\Controllers\ApiController::get_familia_api();
-        dd($familia);
-        return;
+        return $familia;
     }
 
     public function probar_api_sub_familia() {
@@ -55,4 +56,43 @@ class HomeController extends Controller
         return;
     }
 
+    public function store_familia() {
+
+        $familia = $this->probar_api_familia();
+
+        $familia = json_decode($familia);
+
+        foreach ($familia as $key => $value) {
+
+            $id_empresa = $value->id_empresa;
+            $nombre = $value->nombre;
+            $estado = $value->estado;
+
+            $existe = self::familia_existe($id_empresa, $nombre);
+            if (!$existe) {
+
+                $familia = new Familia();
+
+                $familia->id_empresa = $id_empresa;
+                $familia->nombre     = $nombre;
+                $familia->estado     = $estado;
+                $respuesta = $familia->save();
+
+            }
+
+        }
+
+        return;
+
+    }
+
+    private function familia_existe($id_empresa,$nombre,$id = 0) {
+
+        $where = [ ['id_empresa', $id_empresa], ['nombre', $nombre], ['id', '<>', $id] ];
+
+        $familias = DB::table('familias')->select('id')->where($where)->first();
+
+        return $familias == null ? false : true;
+
+    }
 }
