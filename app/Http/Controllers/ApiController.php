@@ -176,7 +176,7 @@ class ApiController extends Controller
 
         $pagina = 1;
         $registros = 20;
-        $bodega = 208;
+        $bodega = 1;
 
         try {
 
@@ -219,6 +219,93 @@ class ApiController extends Controller
                 'headers' => [
                     'token' => $token_->token,
                 ],
+            ]);
+
+            $resultado = $response->getBody()->getContents();
+            $resultado = json_decode($resultado);
+
+        } catch (\Throwable $th) {
+
+            //throw $th;
+        }
+
+        return $resultado;
+
+    }
+
+    public static function generar_venta_api() {
+
+        $resultado = false;
+
+        $token_ = Configuraciones::find(1);
+
+        $bodega = 1;
+
+        try {
+
+            $URL = 'https://sandbox.onedte.com/api/venta';
+
+            $encabezado = (object)[
+                "Cliente" => "66666666-6",
+                "Documento" => 39,
+                "Estado" => 1,
+                "Observacion" => "",
+                "formapago" => 1,
+                "Bodega" => 1,
+                "Dia" => "03",
+                "Mes" => "11",
+                "Anio" => 2023,
+                "FechaVencimiento" => "2023-11-03",
+                "Propina" => 0,
+                "Total" => 2000,
+                "IVA" => 319,
+                "NetoExento" => 0,
+                "NetoAfecto" => 1681,
+                "Descuento" => 0
+            ];
+
+            $detalle = [
+                (object)[
+                    "Item" => 1,
+                    "Codigo" => "L0002",
+                    "id_producto" => 9,
+                    "Precio" => 1000,
+                    "Cantidad" => 1,
+                    "Descuento" => 0,
+                    "Detallelargo" => "",
+                    "Total" => 1000
+                ],
+                (object)[
+                    "Item" => 2,
+                    "Codigo" => "L0003",
+                    "id_producto" => 10,
+                    "Precio" => 100,
+                    "Cantidad" => 10,
+                    "Descuento" => 0,
+                    "Detallelargo" => "",
+                    "Total" => 1000
+                ]
+            ];
+
+            $pago = [
+                (object)[
+                    "Formapago" => 1,
+                    "Total" => 1000
+                ]
+            ];
+
+            $json = (object)[ 'Encabezado' => $encabezado, 'Detalle' => $detalle, 'Pago' => $pago ];
+            $json  = json_encode($json);
+
+            $client = new \GuzzleHttp\Client();
+            $response = $client->request('post', $URL, [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'token' => $token_->token,
+                    'id_bodega' => $bodega
+                ],
+                'body' => $json
             ]);
 
             $resultado = $response->getBody()->getContents();
