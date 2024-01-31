@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\Models\Familia;
 use App\Models\SubFamilia;
 use App\Models\Bodega;
 use App\Models\FormaPago;
 use App\Models\Producto;
+use App\Models\DatoVenta;
+
 use DB;
 
 class HomeController extends Controller
@@ -52,8 +55,7 @@ class HomeController extends Controller
 
     public function probar_api_generar_venta() {
         $venta = \App\Http\Controllers\ApiController::generar_venta_api();
-        dd($venta);
-        return;
+        return $venta;
     }
 
 
@@ -226,6 +228,24 @@ class HomeController extends Controller
             }
 
         }
+
+        return;
+
+    }
+
+    public function store_datos_venta() {
+
+        $venta = $this->probar_api_generar_venta();
+
+        $venta = json_decode($venta);
+
+        $estado = $venta->estado;
+        $numVenta = $venta->numVenta;
+
+        $datos_venta = new DatoVenta();
+        $datos_venta->estado = $estado;
+        $datos_venta->numVenta = $numVenta;
+        $respuesta = $datos_venta->save();
 
         return;
 

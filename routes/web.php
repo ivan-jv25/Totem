@@ -37,6 +37,7 @@ Route::get('store/bodega', [App\Http\Controllers\HomeController::class, 'store_b
 Route::get('store/forma/pago', [App\Http\Controllers\HomeController::class, 'store_forma_pago'])->name('store.forma.pago');
 
 Route::get('store/producto', [App\Http\Controllers\HomeController::class, 'store_producto'])->name('store.producto');
+Route::get('store/datos/venta', [App\Http\Controllers\HomeController::class, 'store_datos_venta'])->name('store.datos.venta');
 
 
 
