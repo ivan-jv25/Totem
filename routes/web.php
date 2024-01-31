@@ -34,6 +34,10 @@ Route::get('api/generar/venta', [App\Http\Controllers\HomeController::class, 'pr
 Route::get('store/familia', [App\Http\Controllers\HomeController::class, 'store_familia'])->name('store.familia');
 Route::get('store/sub/familia', [App\Http\Controllers\HomeController::class, 'store_sub_familia'])->name('store.sub.familia');
 Route::get('store/bodega', [App\Http\Controllers\HomeController::class, 'store_bodega'])->name('store.bodega');
+Route::get('store/forma/pago', [App\Http\Controllers\HomeController::class, 'store_forma_pago'])->name('store.forma.pago');
+
+Route::get('store/producto', [App\Http\Controllers\HomeController::class, 'store_producto'])->name('store.producto');
+
 
 
 require __DIR__.'/auth.php';

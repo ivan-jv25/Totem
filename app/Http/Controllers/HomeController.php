@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Familia;
 use App\Models\SubFamilia;
 use App\Models\Bodega;
+use App\Models\FormaPago;
+use App\Models\Producto;
 use DB;
 
 class HomeController extends Controller
@@ -34,8 +36,7 @@ class HomeController extends Controller
 
     public function probar_api_forma_pago() {
         $forma_pago = \App\Http\Controllers\ApiController::get_forma_pago_api();
-        dd($forma_pago);
-        return;
+        return $forma_pago;
     }
 
     public function probar_api_producto_paginado() {
@@ -46,8 +47,7 @@ class HomeController extends Controller
 
     public function probar_api_producto() {
         $producto = \App\Http\Controllers\ApiController::get_producto_api();
-        dd($producto);
-        return;
+        return $producto;
     }
 
     public function probar_api_generar_venta() {
@@ -55,6 +55,8 @@ class HomeController extends Controller
         dd($venta);
         return;
     }
+
+
 
     public function store_familia() {
 
@@ -146,6 +148,91 @@ class HomeController extends Controller
 
     }
 
+    public function store_forma_pago() {
+
+        $forma_pago = $this->probar_api_forma_pago();
+
+        $forma_pago = json_decode($forma_pago);
+
+        foreach ($forma_pago as $key => $value) {
+
+            $id_forma_pago = $value->id;
+            $nombre = $value->nombre;
+            $sii = $value->sii;
+            $estado = $value->estado;
+            $efectivo = $value->efectivo;
+
+            $existe = self::forma_pago_existe($id_forma_pago);
+            if (!$existe) {
+
+                $forma_pago = new FormaPago();
+
+                $forma_pago->id_forma_pago = $id_forma_pago;
+                $forma_pago->nombre        = $nombre;
+                $forma_pago->sii           = $sii;
+                $forma_pago->estado        = $estado;
+                $forma_pago->efectivo      = $efectivo;
+                $respuesta = $forma_pago->save();
+
+            }
+
+        }
+
+        return;
+
+    }
+
+    public function store_producto() {
+
+        $producto = $this->probar_api_producto();
+
+        $producto = json_decode($producto);
+
+        foreach ($producto as $key => $value) {
+
+            $id_producto = $value->id;
+            $nombre = $value->nombre;
+            $precio_venta = $value->precio_venta;
+            $precio_venta_neto = $value->precio_venta_neto;
+            $codigo = $value->codigo;
+            $codigo_barra = $value->codigo_barra;
+            $id_familia = $value->id_familia;
+            $tipo = $value->tipo;
+            $tipo2 = $value->tipo2;
+            $exento = $value->exento;
+            $imagen = $value->imagen;
+            $stock = $value->stock;
+
+            $existe = self::producto_existe($id_producto);
+            if (!$existe) {
+
+                $producto = new Producto();
+
+                $producto->id_producto = $id_producto;
+                $producto->nombre = $nombre;
+                $producto->precio_venta = $precio_venta;
+                $producto->precio_venta_neto = $precio_venta_neto;
+                $producto->codigo = $codigo;
+                $producto->codigo_barra = $codigo_barra;
+                $producto->id_familia = $id_familia;
+                $producto->tipo = $tipo;
+                $producto->tipo2 = $tipo2;
+                $producto->exento = $exento;
+                $producto->imagen = $imagen;
+                $producto->stock = $stock;
+
+                $respuesta = $producto->save();
+
+            }
+
+        }
+
+        return;
+
+    }
+
+
+
     private function familia_existe($id_familia) {
 
         $where = [ ['id_familia', $id_familia] ];
@@ -175,4 +262,25 @@ class HomeController extends Controller
         return $bodega == null ? false : true;
 
     }
+
+    private function forma_pago_existe($id_forma_pago) {
+
+        $where = [ ['id_forma_pago', $id_forma_pago] ];
+
+        $forma_pago = DB::table('forma_pago')->select('id')->where($where)->first();
+
+        return $forma_pago == null ? false : true;
+
+    }
+
+    private function producto_existe($id_producto) {
+
+        $where = [ ['id_producto', $id_producto] ];
+
+        $producto = DB::table('productos')->select('id')->where($where)->first();
+
+        return $producto == null ? false : true;
+
+    }
+
 }
