@@ -313,6 +313,52 @@ class ApiController extends Controller
 
     }
 
+    public static function get_producto_especifico_api() {
+
+        $resultado = false;
+
+        $token_ = Configuraciones::find(1);
+
+        $codigo = 6915566000033;
+        $tipo = "barra";
+        $idbodega = null;
+        $idbodega = 1;
+
+        $headersinbodega = [
+            'token' => $token_->token,
+            'codigo' => $codigo,
+            'tipo' => $tipo,
+        ];
+
+        $headerbodega = [
+            'token' => $token_->token,
+            'codigo' => $codigo,
+            'tipo' => $tipo,
+            'idbodega' => $idbodega,
+        ];
+
+        $header = $idbodega == null ? $headersinbodega : $headerbodega;
+
+        try {
+
+            $URL = 'https://sandbox.onedte.com/api/get/producto/especifico' ;
+
+            $client = new \GuzzleHttp\Client();
+            $response = $client->request('get',$URL, [
+                'headers' => $header,
+            ]);
+
+            $resultado = $response->getBody()->getContents();
+
+        } catch (\Throwable $th) {
+
+            //throw $th;
+        }
+
+        return $resultado;
+
+    }
+
     public static function store_token($token_) {
 
         $configuracion = new Configuraciones();

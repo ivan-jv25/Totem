@@ -58,6 +58,12 @@ class HomeController extends Controller
         return $venta;
     }
 
+    public function probar_api_producto_especifico() {
+        $prod_especifico = \App\Http\Controllers\ApiController::get_producto_especifico_api();
+        dd($prod_especifico);
+        return $prod_especifico;
+    }
+
 
 
     public function store_familia() {
