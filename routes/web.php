@@ -21,6 +21,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+Route::get('iniciar/totem', [App\Http\Controllers\HomeController::class, 'iniciar_totem'])->name('iniciar.totem');
+
 Route::get('api/info/usuario', [App\Http\Controllers\HomeController::class, 'probar_api_info_usuario'])->name('api.info.usuario');
 Route::get('api/familia', [App\Http\Controllers\HomeController::class, 'probar_api_familia'])->name('api.familia');
 Route::get('api/sub/familia', [App\Http\Controllers\HomeController::class, 'probar_api_sub_familia'])->name('api.sub.familia');
@@ -30,6 +32,8 @@ Route::get('api/producto/paginado', [App\Http\Controllers\HomeController::class,
 Route::get('api/producto', [App\Http\Controllers\HomeController::class, 'probar_api_producto'])->name('api.producto');
 Route::get('api/generar/venta', [App\Http\Controllers\HomeController::class, 'probar_api_generar_venta'])->name('api.generar.venta');
 Route::get('api/producto/especifico', [App\Http\Controllers\HomeController::class, 'probar_api_producto_especifico'])->name('api.producto.especifico');
+Route::get('api/giftcard/codigobarra', [App\Http\Controllers\HomeController::class, 'probar_api_giftcard_codigobarra'])->name('api.giftcard.codigobarra');
+Route::get('api/giftcard/datos', [App\Http\Controllers\HomeController::class, 'probar_api_giftcard_datos'])->name('api.giftcard.datos');
 
 
 Route::get('store/familia', [App\Http\Controllers\HomeController::class, 'store_familia'])->name('store.familia');

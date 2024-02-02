@@ -16,10 +16,23 @@ use DB;
 class HomeController extends Controller
 {
 
+    public function iniciar_totem(){
+        // Consigue un token de ingreso
+        $this->probar_api_info_usuario();
+
+        // Rellena BD
+        $this->store_familia();
+        $this->store_sub_familia();
+        $this->store_bodega();
+        $this->store_forma_pago();
+
+    }
+
+
+
     public function probar_api_info_usuario() {
         $usuario = \App\Http\Controllers\ApiController::get_info_usuario_api();
-        dd($usuario);
-        return;
+        return $usuario;
     }
 
     public function probar_api_familia() {
@@ -44,8 +57,7 @@ class HomeController extends Controller
 
     public function probar_api_producto_paginado() {
         $producto_paginado = \App\Http\Controllers\ApiController::get_producto_paginado_api();
-        dd($producto_paginado);
-        return;
+        return $producto_paginado;
     }
 
     public function probar_api_producto() {
@@ -60,8 +72,17 @@ class HomeController extends Controller
 
     public function probar_api_producto_especifico() {
         $prod_especifico = \App\Http\Controllers\ApiController::get_producto_especifico_api();
-        dd($prod_especifico);
         return $prod_especifico;
+    }
+
+    public function probar_api_giftcard_codigobarra() {
+        $giftcard_codigobarra = \App\Http\Controllers\ApiController::get_giftcard_codigobarra_api();
+        return $giftcard_codigobarra;
+    }
+
+    public function probar_api_giftcard_datos() {
+        $giftcard_datos = \App\Http\Controllers\ApiController::get_datos_giftcard();
+        return $giftcard_datos;
     }
 
 
@@ -69,7 +90,6 @@ class HomeController extends Controller
     public function store_familia() {
 
         $familia = $this->probar_api_familia();
-
         $familia = json_decode($familia);
 
         foreach ($familia as $key => $value) {
@@ -82,6 +102,15 @@ class HomeController extends Controller
             if (!$existe) {
 
                 $familia = new Familia();
+
+                $familia->id_familia = $id_familia;
+                $familia->nombre     = $nombre;
+                $familia->estado     = $estado;
+                $respuesta = $familia->save();
+
+            } else {
+
+                $familia = Familia::find($id_familia);
 
                 $familia->id_familia = $id_familia;
                 $familia->nombre     = $nombre;

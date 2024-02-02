@@ -13,6 +13,7 @@ class Configuraciones extends Model
 
     protected $fillable = [
         'token',
+        'key',
     ];
 
 }
