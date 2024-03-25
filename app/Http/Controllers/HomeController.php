@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 use App\Models\Familia;
 use App\Models\SubFamilia;
@@ -11,6 +12,7 @@ use App\Models\FormaPago;
 use App\Models\Producto;
 use App\Models\DatoVenta;
 
+use Validator;
 use DB;
 
 class HomeController extends Controller
@@ -51,11 +53,13 @@ class HomeController extends Controller
 
     public function probar_api_info_usuario() {
         $usuario = \App\Http\Controllers\ApiController::get_info_usuario_api();
+        dd($usuario);
         return $usuario;
     }
 
     public function probar_api_familia() {
         $familia = \App\Http\Controllers\ApiController::get_familia_api();
+        dd($familia);
         return $familia;
     }
 
@@ -89,9 +93,18 @@ class HomeController extends Controller
         return $venta;
     }
 
-    public function probar_api_producto_especifico() {
-        $prod_especifico = \App\Http\Controllers\ApiController::get_producto_especifico_api();
-        return $prod_especifico;
+    public function probar_api_producto_especifico(Request $request) {
+
+        $validator = Validator::make($request->all(), [ 'codigo_barra' => 'required|string|max:13', ]);
+        if ($validator->fails()) { return new JsonResponse([ 'status'=>false, 'mensaje' => 'Favor revisar Datos Ingresados', 'error' => $validator->failed(), 'alert' => 'error' ], 500); }
+
+
+        $codigo_barra = (string)$request->codigo_barra;
+
+        $prod_especifico = \App\Http\Controllers\ApiController::get_producto_especifico_api($codigo_barra);
+        
+
+        return new JsonResponse([ 'status'=>true, 'producto' => $prod_especifico ], 200);
     }
 
     public function probar_api_giftcard_codigobarra() {

@@ -24,6 +24,7 @@ Route::get('/dashboard', function () {
 Route::get('iniciar/totem', [App\Http\Controllers\HomeController::class, 'iniciar_totem'])->name('iniciar.totem');
 
 Route::get('api/info/usuario', [App\Http\Controllers\HomeController::class, 'probar_api_info_usuario'])->name('api.info.usuario');
+
 Route::get('api/familia', [App\Http\Controllers\HomeController::class, 'probar_api_familia'])->name('api.familia');
 Route::get('api/sub/familia', [App\Http\Controllers\HomeController::class, 'probar_api_sub_familia'])->name('api.sub.familia');
 Route::get('api/bodega', [App\Http\Controllers\HomeController::class, 'probar_api_bodega'])->name('api.bodega');

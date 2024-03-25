@@ -10,28 +10,25 @@ use DB;
 class ApiController extends Controller
 {
 
-    static $empresa  = null;
-    static $username = null;
-    static $password = null;
+    public static $endpoint = 'http://192.168.1.101/';
 
     public static function get_info_usuario_api() {
 
-        $resultado = false;
+        $resultado = null;
 
-        self::$empresa  = env('EMPRESA_TEST');
-        self::$username = env('USERNAME_TEST');
-        self::$password = env('PASSWORD_TEST');
+        $empresa  = env('EMPRESA_TEST');
+        $username = env('USERNAME_TEST');
+        $password = env('PASSWORD_TEST');
 
-        $header = [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ];
+        $header = [ 'Content-Type' => 'application/json', 'Accept' => 'application/json', ];
 
         try {
 
-            $URL = 'https://sandbox.onedte.com/api/login';
-            $json = (object)[ 'empresa' => self::$empresa, 'username' => self::$username, 'password' => self::$password ];
+            $URL = self::$endpoint.'api/login';
+            $json = (object)[ 'empresa' => $empresa, 'username' => $username, 'password' => $password ];
             $json  = json_encode($json);
+
+            
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('post', $URL, [ 'headers' => $header, 'body' => $json ]);
@@ -39,66 +36,62 @@ class ApiController extends Controller
             $resultado = $response->getBody()->getContents();
             $resultado = json_decode($resultado);
 
-            $token_ = $resultado[0]->Token;
-            $key = 'ingreso';
-            self::store_token($token_, $key);
+            $token_    = $resultado[0]->Token;
+            $id_bodega = $resultado[0]->id_bodega;
+            
+            self::store_value($token_, 'token');
+            self::store_value($id_bodega, 'id_bodega');
 
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
+        } catch (\Throwable $th) {}
 
         return $resultado;
-
     }
 
     public static function get_familia_api() {
 
-        $resultado = false;
-
-        $key = 'ingreso';
-        $token_ = self::get_token($key);
-
-        if ($token_ == null) {
+        $resultado = null;
+        $token = self::get_value('token');
+        
+        if ($token == null) {
             self::get_info_usuario_api();
-            $token_ = self::get_token($key);
+            $token = self::get_value($key);
         }
 
-        $header = [ 'token' => $token_->token, ];
+        $header = [ 'token' => $token, ];
 
         try {
 
-            $URL = 'https://sandbox.onedte.com/api/familia' ;
+            $URL = self::$endpoint.'api/familia' ;
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('get',$URL, [ 'headers' => $header ]);
 
             $resultado = $response->getBody()->getContents();
-
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
-
+            $resultado = json_decode($resultado);
+        } catch (\Throwable $th) { }
         return $resultado;
-
     }
+
+
+
 
     public static function get_sub_familia_api() {
 
         $resultado = false;
 
-        $key = 'ingreso';
-        $token_ = self::get_token($key);
+        $key = 'token';
+        $token_ = self::get_value($key);
 
         if ($token_ == null) {
             self::get_info_usuario_api();
-            $token_ = self::get_token($key);
+            $token_ = self::get_value($key);
         }
 
         $header = [ 'token' => $token_->token, ];
 
         try {
 
-            $URL = 'https://sandbox.onedte.com/api/subfamilia' ;
+            $URL = $endpoint.'api/subfamilia' ;
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('get',$URL, [ 'headers' => $header ]);
@@ -117,19 +110,19 @@ class ApiController extends Controller
 
         $resultado = false;
 
-        $key = 'ingreso';
-        $token_ = self::get_token($key);
+        $key = 'token';
+        $token_ = self::get_value($key);
 
         if ($token_ == null) {
             self::get_info_usuario_api();
-            $token_ = self::get_token($key);
+            $token_ = self::get_value($key);
         }
 
         $header = [ 'token' => $token_->token, ];
 
         try {
 
-            $URL = 'https://sandbox.onedte.com/api/bodega' ;
+            $URL = $endpoint.'api/bodega' ;
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('get',$URL, [ 'headers' => $header ]);
@@ -148,19 +141,19 @@ class ApiController extends Controller
 
         $resultado = false;
 
-        $key = 'ingreso';
-        $token_ = self::get_token($key);
+        $key = 'token';
+        $token_ = self::get_value($key);
 
         if ($token_ == null) {
             self::get_info_usuario_api();
-            $token_ = self::get_token($key);
+            $token_ = self::get_value($key);
         }
 
         $header = [ 'token' => $token_->token, ];
 
         try {
 
-            $URL = 'https://sandbox.onedte.com/api/formapago' ;
+            $URL = $endpoint.'api/formapago' ;
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('get',$URL, [ 'headers' => $header ]);
@@ -179,12 +172,12 @@ class ApiController extends Controller
 
         $resultado = false;
 
-        $key = 'ingreso';
-        $token_ = self::get_token($key);
+        $key = 'token';
+        $token_ = self::get_value($key);
 
         if ($token_ == null) {
             self::get_info_usuario_api();
-            $token_ = self::get_token($key);
+            $token_ = self::get_value($key);
         }
 
         $pagina = 1;
@@ -200,7 +193,7 @@ class ApiController extends Controller
 
         try {
 
-            $URL = 'https://sandbox.onedte.com/api/productos/paginado/v2' ;
+            $URL = $endpoint.'api/productos/paginado/v2' ;
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('get',$URL, [ 'headers' => $header ]);
@@ -219,19 +212,19 @@ class ApiController extends Controller
 
         $resultado = false;
 
-        $key = 'ingreso';
-        $token_ = self::get_token($key);
+        $key = 'token';
+        $token_ = self::get_value($key);
 
         if ($token_ == null) {
             self::get_info_usuario_api();
-            $token_ = self::get_token($key);
+            $token_ = self::get_value($key);
         }
 
         $header = [ 'token' => $token_->token, ];
 
         try {
 
-            $URL = 'https://sandbox.onedte.com/api/inventario/ecommerce/1' ;
+            $URL = $endpoint.'api/inventario/ecommerce/1' ;
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('get',$URL, [ 'headers' => $header ]);
@@ -251,12 +244,12 @@ class ApiController extends Controller
 
         $resultado = false;
 
-        $key = 'ingreso';
-        $token_ = self::get_token($key);
+        $key = 'token';
+        $token_ = self::get_value($key);
 
         if ($token_ == null) {
             self::get_info_usuario_api();
-            $token_ = self::get_token($key);
+            $token_ = self::get_value($key);
         }
 
         $bodega = 1;
@@ -270,7 +263,7 @@ class ApiController extends Controller
 
         try {
 
-            $URL = 'https://sandbox.onedte.com/api/venta';
+            $URL = $endpoint.'api/venta';
 
             $encabezado = (object)[
                 "Cliente" => "66666666-6",
@@ -337,66 +330,56 @@ class ApiController extends Controller
 
     }
 
-    public static function get_producto_especifico_api() {
+    public static function get_producto_especifico_api(string $codigo) {
 
         $resultado = false;
 
-        $key = 'ingreso';
-        $token_ = self::get_token($key);
+        
+        $token_ = self::get_value('token');
 
         if ($token_ == null) {
             self::get_info_usuario_api();
-            $token_ = self::get_token($key);
+            $token_ = self::get_value('token');
         }
 
-        $codigo = 6915566000033;
+        
         $tipo = "barra";
-        $idbodega = null;
-        $idbodega = 1;
+        
+        $idbodega = self::get_value('id_bodega');;
 
-        $headersinbodega = [
-            'token' => $token_->token,
-            'codigo' => $codigo,
-            'tipo' => $tipo,
-        ];
 
-        $headerbodega = [
-            'token' => $token_->token,
+        $header = [
+            'token' => $token_,
             'codigo' => $codigo,
             'tipo' => $tipo,
             'idbodega' => $idbodega,
         ];
 
-        $header = $idbodega == null ? $headersinbodega : $headerbodega;
-
         try {
 
-            $URL = 'https://sandbox.onedte.com/api/get/producto/especifico' ;
+            $URL = self::$endpoint.'api/get/producto/especifico' ;
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('get',$URL, [ 'headers' => $header ]);
 
-            $resultado = $response->getBody()->getContents();
-
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
+            if($response->getStatusCode() == 200){ $resultado = json_decode($response->getBody()->getContents(),TRUE); }
+            
+        } catch (\Throwable $th) { }
 
         return $resultado;
-
     }
 
     public static function get_giftcard_codigobarra_api() {
 
         $resultado = false;
 
-        //tiene que cambiar a ingreso la key
+        //tiene que cambiar a token la key
         $key = 'prod';
-        $token_ = self::get_token($key);
+        $token_ = self::get_value($key);
 
         if ($token_ == null) {
             self::get_info_usuario_api();
-            $token_ = self::get_token($key);
+            $token_ = self::get_value($key);
         }
 
         $codigo = 189279027;
@@ -408,7 +391,7 @@ class ApiController extends Controller
 
         try {
 
-            $URL = 'http://onedte.cl/api/giftcard/codigobarra' ;
+            $URL = $endpoint.'api/giftcard/codigobarra' ;
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('get',$URL, [ 'headers' => $header ]);
@@ -418,7 +401,7 @@ class ApiController extends Controller
 
             $token_ = $resultado->token;
             $key = 'giftcard';
-            self::store_token($token_, $key);
+            self::store_value($token_, $key);
 
 
         } catch (\Throwable $th) {
@@ -434,22 +417,22 @@ class ApiController extends Controller
 
         $resultado = false;
 
-        //tiene que cambiar a ingreso la key
-        $key = 'prod';
-        $token_ = self::get_token($key);
+        //tiene que cambiar a token la key
+        
+        $token_ = self::get_value('prod');
 
         if ($token_ == null) {
             self::get_info_usuario_api();
-            $token_ = self::get_token($key);
+            $token_ = self::get_value('prod');
         }
 
 
-        $key = 'giftcard';
-        $giftcard = self::get_token($key);
+        
+        $giftcard = self::get_value('giftcard');
 
         if ($giftcard == null) {
             self::get_giftcard_codigobarra_api();
-            $giftcard = self::get_token($key);
+            $giftcard = self::get_value('giftcard');
         }
 
         $header = [
@@ -459,7 +442,7 @@ class ApiController extends Controller
 
         try {
 
-            $URL = 'http://onedte.cl/api/giftcard/token' ;
+            $URL = $endpoint.'api/giftcard/token' ;
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('get',$URL, [ 'headers' => $header ]);
@@ -475,23 +458,20 @@ class ApiController extends Controller
 
     }
 
-    private static function store_token($token_, $key) {
+    private static function store_value($value, $key) {
 
-        $token = self::get_token($key);
+        $configuracion = Configuraciones::where('key', $key)->first();
+        if($configuracion == null){ $configuracion = new Configuraciones(); }
 
-        if($token == null) {
-            $configuracion = new Configuraciones();
-            $configuracion->token = $token_;
-            $configuracion->key = $key;
-            $configuracion->save();
-        }
-
+        $configuracion->token = $value;
+        $configuracion->key = $key;
+        $configuracion->save();
     }
 
-    private static function get_token($key){
+    private static function get_value($key){
         $where = [ ['key', $key] ];
         $configuracion = DB::table('configuraciones')->select('token')->where($where)->first();
-        return $configuracion;
+        return $configuracion == null ? null : $configuracion->token;
     }
 
 }
