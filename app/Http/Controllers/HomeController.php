@@ -107,9 +107,12 @@ class HomeController extends Controller
         return new JsonResponse([ 'status'=>true, 'producto' => $prod_especifico ], 200);
     }
 
-    public function probar_api_giftcard_codigobarra() {
-        $giftcard_codigobarra = \App\Http\Controllers\ApiController::get_giftcard_codigobarra_api();
-        return $giftcard_codigobarra;
+    public function probar_api_giftcard_codigobarra(Request $request) {
+        $codigo = (string)$request->codigo;
+        $giftcard_codigobarra = \App\Http\Controllers\ApiController::get_giftcard_codigobarra_api($codigo);
+
+        $giftcard_datos = \App\Http\Controllers\ApiController::get_datos_giftcard($giftcard_codigobarra);
+        return (array)$giftcard_datos;
     }
 
     public function probar_api_giftcard_datos() {

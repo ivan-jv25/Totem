@@ -369,29 +369,29 @@ class ApiController extends Controller
         return $resultado;
     }
 
-    public static function get_giftcard_codigobarra_api() {
+    public static function get_giftcard_codigobarra_api(string $codigo) {
 
         $resultado = false;
 
         //tiene que cambiar a token la key
-        $key = 'prod';
-        $token_ = self::get_value($key);
+        
+        $token_ = self::get_value('token');
 
         if ($token_ == null) {
             self::get_info_usuario_api();
-            $token_ = self::get_value($key);
+            $token_ = self::get_value('token');
         }
 
-        $codigo = 189279027;
+        //$codigo = 189279027;
 
         $header = [
-            'token' => $token_->token,
+            'token' => $token_,
             'codigo' => $codigo,
         ];
 
         try {
 
-            $URL = $endpoint.'api/giftcard/codigobarra' ;
+            $URL = self::$endpoint.'api/giftcard/codigobarra' ;
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('get',$URL, [ 'headers' => $header ]);
@@ -399,9 +399,11 @@ class ApiController extends Controller
             $resultado = $response->getBody()->getContents();
             $resultado = json_decode($resultado);
 
-            $token_ = $resultado->token;
-            $key = 'giftcard';
-            self::store_value($token_, $key);
+            
+
+            $resultado = $resultado->token;
+            // $key = 'giftcard';
+            // self::store_value($token_, $key);
 
 
         } catch (\Throwable $th) {
@@ -413,41 +415,33 @@ class ApiController extends Controller
 
     }
 
-    public static function get_datos_giftcard() {
+    public static function get_datos_giftcard(string $token_giftcard) {
 
         $resultado = false;
 
-        //tiene que cambiar a token la key
-        
-        $token_ = self::get_value('prod');
+        $token_ = self::get_value('token');
 
         if ($token_ == null) {
             self::get_info_usuario_api();
-            $token_ = self::get_value('prod');
-        }
-
-
-        
-        $giftcard = self::get_value('giftcard');
-
-        if ($giftcard == null) {
-            self::get_giftcard_codigobarra_api();
-            $giftcard = self::get_value('giftcard');
+            $token_ = self::get_value('token');
         }
 
         $header = [
-            'token' => $token_->token,
-            'giftcard' => $giftcard->token,
+            'token' => $token_,
+            'giftcard' => $token_giftcard,
         ];
 
         try {
 
-            $URL = $endpoint.'api/giftcard/token' ;
+            $URL = self::$endpoint.'api/giftcard/token' ;
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('get',$URL, [ 'headers' => $header ]);
 
             $resultado = $response->getBody()->getContents();
+
+            $resultado = json_decode($resultado);
+            
 
         } catch (\Throwable $th) {
 

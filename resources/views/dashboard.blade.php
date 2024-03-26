@@ -39,7 +39,7 @@
 
     
     <div id="contenido" class="container-fluid p-2"  style="display: none;">
-
+      
       <div class="banner">
         <div id="carouselExampleIndicators" class="carousel slide  h-100" data-ride="carousel">
           <div class="carousel-inner">
@@ -61,16 +61,16 @@
           <div class="card card-listado w-100">
             <div class="card-body mt-5">
               <div class="row">
-                <h1 class="card-title text-center w-100">Bienvenido ! [Nombre Cliente]</h1>
+                <h1 class="card-title text-center w-100">Bienvenido ! <span id="sp_nombre_cliente"></span></h1>
               </div>
               <div class="table-responsive">
-                <table class="table table-hover no-wrap v-middle">
+                <table class="table table-striped  no-wrap v-middle">
                   <thead>
                     <tr class="border-0 text-center">
-                      <th class="border-0">Item</th>
-                      <th colspan="2" class="border-0">Producto</th>
-                      <th class="border-0">Cantidad</th>
-                      <th class="border-0">Total</th>
+                      <th class="border-0 fs-2">ITEM</th>
+                      <th colspan="2" class="border-0 fs-2">PRODUCTO</th>
+                      <th class="border-0 fs-2">CANTIDAD</th>
+                      <th class="border-0 fs-2">TOTAL</th>
                     </tr>
                   </thead>
                   <tbody id="tbody_carro"></tbody>
@@ -86,18 +86,25 @@
           <div class="card card-pedido w-100">
             <div class="card-body button-group d-flex ">
               <div class="mt-5">
-                <p>Total : <span>$999.999.-</span></p>
+                <p>Total : <span id="sp_total">$0.-</span></p>
               </div>
               <div class="ms-auto">
-                <button type="button" class="btn  btn-lg btn-rounded btn-secondary btn-pago my-5">Pagar</button>
+                <button type="button" class="btn  btn-lg btn-rounded btn-secondary btn-pago my-5">Pagar $</button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
+      <input type="text" id="txt_buscador_producto">
     </div>
-    
+
+
+    <script>
+      const TOKEN_SESSION = '{{csrf_token()}}';
+      const URL_CONSULTA_CLIENTE = "{{route('api.giftcard.codigobarra')}}"
+      const URL_CONSULTA_CODIGO = "{{route('api.producto.especifico')}}"
+      const IMAGEN_DEFECTO = "{{asset('assets/images/sinimagen.png')}}"
+    </script>
     <script src="{{asset('totem/script.js')}}"></script>
         
   </body>
