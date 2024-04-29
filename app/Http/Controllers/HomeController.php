@@ -102,9 +102,10 @@ class HomeController extends Controller
         $codigo_barra = (string)$request->codigo_barra;
 
         $prod_especifico = \App\Http\Controllers\ApiController::get_producto_especifico_api($codigo_barra);
-        
 
-        return new JsonResponse([ 'status'=>true, 'producto' => $prod_especifico ], 200);
+        $respuesta = count($prod_especifico) == 0 ? false : true;
+        
+        return new JsonResponse([ 'status'=>$respuesta, 'producto' => $prod_especifico ], 200);
     }
 
     public function probar_api_giftcard_codigobarra(Request $request) {

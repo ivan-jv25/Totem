@@ -67,8 +67,10 @@
 }
 
 #contenido {
-    animation: show_conteiner 2s forwards;
-    border   : 10px solid #fedbd5;
+
+    animation : show_conteiner 2s forwards;
+    border    : 10px solid #fedbd5;
+    background: radial-gradient(circle, #FFF, #fedbd594);
 
 }
 
@@ -136,13 +138,13 @@ body {
 
 
 .listado {
-    min-height         : 67vh;
+    min-height         : 79vh;
     /* background-color: blue; */
 }
 
 .pedido {
     /* background-color: yellow; */
-    min-height      : 10vh;
+    min-height      : 1vh;
     position        : fixed;
     bottom          : 1cm;
     left            : 1cm;
@@ -152,14 +154,15 @@ body {
 }
 
 .card-listado {
-    min-height                : 69vh;
+    min-height                : 77vh;
     border-bottom-right-radius: 25px !important;
     border-bottom-left-radius : 25px !important;
     /* background-color       : blue; */
+    background-color          : transparent;
 }
 
 .card-pedido {
-    min-height      : 10vh;
+    min-height      : 6vh;
     background-color: #fedbd5 !important;
     border-radius   : 10px !important;
 }
@@ -236,4 +239,43 @@ body {
 
 #sp_nombre_cliente {
     font-size: 1.9rem;
+}
+
+.text-producto {
+    font-size: 1.9rem;
+}
+
+.text-precio {
+    font-size: 2.3rem;
+}
+
+.rounded-circle {
+    border-radius: 14% !important;
+    width        : 90px;
+    height       : 90px;
+}
+
+.d-block {
+    height: 300px;
+}
+
+.bgt {
+    background-color: transparent;
+}
+
+.table-striped thead {
+    background-color: #ffffff94;
+}
+
+div:where(.swal2-container) div:where(.swal2-popup) {
+
+    font-size: 3rem !important;
+}
+
+.txt_titulo_pago {
+    font-size: 4rem
+}
+
+.txt_sub_titulo_pago {
+    font-size: 2rem;
 }

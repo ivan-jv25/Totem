@@ -1,31 +1,18 @@
 var listado_producto = []
-const lista_productos = [
-    {
-      "codigo": "PROD001",
-      "nombre": "Papas",
-      "precio": 15000,
-      "imagen": "assets/images/productos/imagen_papas.jpg"
+const observador = { valor: false };
+
+
+Object.defineProperty(observador, 'valor', {
+    get() {
+      return this._valor;
     },
-    {
-      "codigo": "PROD002",
-      "nombre": "Agua",
-      "precio": 5000,
-      "imagen": "assets/images/productos/imagen_agua.jpg"
-    },
-    {
-      "codigo": "PROD003",
-      "nombre": "Yogurt",
-      "precio": 20000,
-      "imagen": "assets/images/productos/imagen_yogurt.jpg"
-    },
-    {
-      "codigo": "PROD004",
-      "nombre": "Sandwich",
-      "precio": 35000,
-      "imagen": "assets/images/productos/imagen_sandwich.jpg"
+    set(nuevoValor) {
+      const valorAnterior = this._valor;
+      this._valor = nuevoValor;
+      observadorCallback(nuevoValor);
     }
-  ]
-  
+  });
+
 window.onload=()=>{
     
     set_focus_code()
@@ -33,10 +20,39 @@ window.onload=()=>{
     document.getElementById("input_code_cliente").addEventListener("keydown", handleKeyDown);
 
     document.getElementById('txt_buscador_producto').addEventListener("keydown", handleKeyDown_producto);
-    
-    
-    //consulta_codigo('1')
 
+    document.getElementById("btn_genera_pago").addEventListener("click", generar_pago);
+
+
+    
+    
+    
+    consulta_codigo('189279027')
+    
+    // Definir los intervalos y almacenar los identificadores devueltos por setInterval
+    const intervalo1 = setInterval(() => { buscar_producto('PROD001'); }, 2000);
+    const intervalo2 = setInterval(() => { buscar_producto('987654321'); }, 4000);
+    const intervalo3 = setInterval(() => { buscar_producto('1007001001'); }, 6000);
+    const intervalo4 = setInterval(() => { buscar_producto('PROD003'); }, 8000);
+    const intervalo5 = setInterval(() => { buscar_producto('PROD004'); }, 10000);
+
+    
+    
+    // Por ejemplo, cancelar el intervalo después de cierto tiempo (en este caso, 10 segundos)
+    setTimeout(() => {
+      clearInterval(intervalo1);
+      clearInterval(intervalo2);
+      clearInterval(intervalo3);
+      clearInterval(intervalo4);
+      clearInterval(intervalo5);
+      console.log('Intervalos cancelados.');
+
+    //   generar_pago()
+      
+    }, 10000);
+
+    
+    
     // lista_carro()
 }
 
@@ -56,8 +72,6 @@ function handleKeyDown_producto(event) {
 }
 
 const consulta_codigo = async (_codigo) => {
-
-    console.log(_codigo)
 
     const existe = await existe_codigo(_codigo)
 
@@ -145,8 +159,6 @@ const open_doors = ()=>{
 
 const buscar_producto = (_codigo) =>{
 
-    console.log(_codigo)
-
     const obj = {
         _token:TOKEN_SESSION,
         codigo_barra: _codigo
@@ -160,16 +172,11 @@ const buscar_producto = (_codigo) =>{
             if(!data.status){
                 throw "producto no ecnontrado"
             }
-
-
             agregar_producto(data.producto)
-
-
         })
         .catch(error =>{
             console.log(error)
         });
-   
 }
 
 const agregar_producto = (_producto) => {
@@ -196,8 +203,6 @@ const agregar_producto = (_producto) => {
 
     }
 
-    console.log(listado_producto)
-
     lista_carro()
     set_focus_buscador_producto()
 
@@ -211,37 +216,101 @@ const lista_carro = ()=>{
     listado_producto.forEach(element => {
         count++
         element.total = element.precio_venta * element.cantidad
+
+        const _total = element.total.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
+
+
         _lista += `
         <tr class="border-2">
-        <td >${count}</td>
-        <td align="center">
-            <img src="${element.imagen}" class="rounded-circle" width="100">
-        </td>
-        <td align="center">
-            <p class="mb-0   w-100">${element.nombre}</p>
-        </td>
+            <td style="width: 5%;" >${count}</td>
+            <td style="width: 10%;" align="center">
+                <img src="${element.imagen}" class="rounded-circle" width="100">
+            </td>
+            <td style="width: 55%;" align="center">
+                <p class="mb-0 w-100 text-producto">${element.nombre}</p>
+            </td>
             
-        <td align="center">
-        <div class="input-group my-2">
-                <button type="button" class="btn btn-dark"><i class="fa fa-minus"></i></button>
-                <div class="form-floating">
-                    <input type="text" class="form-control text-center" id="floatingInputGroup1" value="${element.cantidad}">
+            <td style="width: 25%;" align="center">
+            
+                <div class="input-group my-2">
+
+                    <button type="button" class="btn btn-dark"><i class="fa fa-minus"></i></button>
+
+                    <div class="form-floating">
+                        <input type="text" class="form-control text-center" id="floatingInputGroup1" value="${element.cantidad}">
+                    </div>
+
+                    <button type="button" class="btn btn-dark"><i class="fa fa-plus"></i></button>
                 </div>
-                <button type="button" class="btn btn-dark"><i class="fa fa-plus"></i></button>
-            </div>
-        </td>
-        <td align="center" class="blue-grey-text  text-darken-4 font-medium">$${element.total}</td>
-    </tr>
 
-        `
-    });
+            </td>
+            <td style="width: 5%;" align="center" class="blue-grey-text  text-darken-4 text-precio">${_total}</td>
+        </tr>
 
-    const total = listado_producto.reduce((detalle, actual) =>{ return detalle = detalle + actual.total },0)
-    
+    `});
 
-    
+    const total = listado_producto.reduce((detalle, actual) =>{ return detalle = detalle + actual.total },0).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
+
     document.getElementById('tbody_carro').innerHTML = _lista
-    document.getElementById('sp_total').innerHTML = `$${total}.-`
+    document.getElementById('sp_total').innerHTML = `${total}.-`
 }
 
 
+const generar_pago = () =>{
+
+    
+    Swal.fire({
+        title: `<strong class="txt_titulo_pago">Por favor, complete su pago para continuar</strong>`,
+        html: `
+            <img src="/assets/images/cargando.gif" style="width: auto;">
+            <br><br>
+            <p class="txt_sub_titulo_pago">Estamos esperando su confirmación de pago para procesar su solicitud.
+            Gracias por su paciencia.</p>
+        `,
+        allowOutsideClick: false,
+        showConfirmButton:false
+    });
+
+}
+
+const observadorCallback = (nuevoValor) =>{
+
+    console.log("se genero un cambio en el valor")
+    console.log(nuevoValor)
+
+    if(nuevoValor){
+
+        Swal.fire({
+            title: "¡Pago Exitoso!",
+            text: "¡Gracias por elegirnos! Esperamos que disfrutes tu compra y que tengas un día maravilloso.",
+            icon: "success",
+            allowOutsideClick: false,
+            showConfirmButton:false
+          });
+
+    }else{
+
+        Swal.fire({
+            title: "Pago Rechazado",
+            text: "Lamentamos informarte que el pago ha sido rechazado. Por favor, intenta nuevamente o selecciona otro método de pago. Gracias por tu comprensión.",
+            icon: "error",
+            allowOutsideClick: false,
+            showConfirmButton:false
+          });
+
+    }
+
+}
+
+const procesador_pago = (_algun_parametro)=>{
+
+    const estado_pago = _algun_parametro.status
+
+    if(estado_pago){
+        observador.valor = true
+
+    }else{
+        observador.valor = false
+    }
+
+}
