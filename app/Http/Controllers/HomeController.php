@@ -47,19 +47,22 @@ class HomeController extends Controller
         $this->store_bodega();
         $this->store_forma_pago();
 
+
+        echo "Pre Carga de Informacion lista";
+
     }
 
 
 
     public function probar_api_info_usuario() {
         $usuario = \App\Http\Controllers\ApiController::get_info_usuario_api();
-        dd($usuario);
+        
         return $usuario;
     }
 
     public function probar_api_familia() {
         $familia = \App\Http\Controllers\ApiController::get_familia_api();
-        dd($familia);
+        
         return $familia;
     }
 
@@ -125,8 +128,9 @@ class HomeController extends Controller
 
     public function store_familia() {
 
-        $familia = $this->probar_api_familia();
-        $familia = json_decode($familia);
+        
+        $familia = \App\Http\Controllers\ApiController::get_familia_api();
+        
 
         foreach ($familia as $key => $value) {
 
@@ -135,6 +139,7 @@ class HomeController extends Controller
             $estado = $value->estado;
 
             $existe = self::familia_existe($id_familia);
+            ($existe);
             if (!$existe) {
 
                 $familia = new Familia();
@@ -146,9 +151,8 @@ class HomeController extends Controller
 
             } else {
 
-                $familia = Familia::find($id_familia);
-
-                $familia->id_familia = $id_familia;
+                $familia = Familia::where('id_familia',$id_familia)->first();
+                
                 $familia->nombre     = $nombre;
                 $familia->estado     = $estado;
                 $respuesta = $familia->save();
@@ -163,9 +167,8 @@ class HomeController extends Controller
 
     public function store_sub_familia() {
 
-        $sub_familia = $this->probar_api_sub_familia();
-
-        $sub_familia = json_decode($sub_familia);
+        
+        $sub_familia = \App\Http\Controllers\ApiController::get_sub_familia_api();
 
         foreach ($sub_familia as $key => $value) {
 
@@ -195,9 +198,10 @@ class HomeController extends Controller
 
     public function store_bodega() {
 
-        $bodega = $this->probar_api_bodega();
+        
+        $bodega = \App\Http\Controllers\ApiController::get_bodega_api();
 
-        $bodega = json_decode($bodega);
+        
 
         foreach ($bodega as $key => $value) {
 
@@ -223,17 +227,18 @@ class HomeController extends Controller
 
     public function store_forma_pago() {
 
-        $forma_pago = $this->probar_api_forma_pago();
-
-        $forma_pago = json_decode($forma_pago);
+        $forma_pago = \App\Http\Controllers\ApiController::get_forma_pago_api();
 
         foreach ($forma_pago as $key => $value) {
+
+            
 
             $id_forma_pago = $value->id;
             $nombre = $value->nombre;
             $sii = $value->sii;
             $estado = $value->estado;
-            $efectivo = $value->efectivo;
+            $efectivo = $value->efectivo == null ? 0 : 1;
+            
 
             $existe = self::forma_pago_existe($id_forma_pago);
             if (!$existe) {
@@ -330,7 +335,7 @@ class HomeController extends Controller
 
         $familias = DB::table('familias')->select('id')->where($where)->first();
 
-        return $familias == null ? false : true;
+        return $familias != null ;
 
     }
 

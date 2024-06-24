@@ -229,4 +229,12 @@ return [
 
     ],
 
+
+    'AUTH' => [
+        'EMPRESA_TEST' =>env('EMPRESA_TEST'),
+        'USERNAME_TEST' =>env('USERNAME_TEST'),
+        'PASSWORD_TEST' =>env('PASSWORD_TEST'),
+        
+    ],
+
 ];

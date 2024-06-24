@@ -16,9 +16,10 @@ class ApiController extends Controller
 
         $resultado = null;
 
-        $empresa  = env('EMPRESA_TEST');
-        $username = env('USERNAME_TEST');
-        $password = env('PASSWORD_TEST');
+
+        $empresa  =  config('app.AUTH')['EMPRESA_TEST'];
+        $username  =  config('app.AUTH')['USERNAME_TEST'];
+        $password  =  config('app.AUTH')['PASSWORD_TEST'];
 
         $header = [ 'Content-Type' => 'application/json', 'Accept' => 'application/json', ];
 
@@ -27,8 +28,6 @@ class ApiController extends Controller
             $URL = self::$endpoint.'api/login';
             $json = (object)[ 'empresa' => $empresa, 'username' => $username, 'password' => $password ];
             $json  = json_encode($json);
-
-            
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('post', $URL, [ 'headers' => $header, 'body' => $json ]);
@@ -42,14 +41,14 @@ class ApiController extends Controller
             self::store_value($token_, 'token');
             self::store_value($id_bodega, 'id_bodega');
 
-        } catch (\Throwable $th) {}
+        } catch (\Throwable $th) { }
 
         return $resultado;
     }
 
     public static function get_familia_api() {
 
-        $resultado = null;
+        $resultado = [];
         $token = self::get_value('token');
         
         if ($token == null) {
@@ -72,12 +71,9 @@ class ApiController extends Controller
         return $resultado;
     }
 
-
-
-
     public static function get_sub_familia_api() {
 
-        $resultado = false;
+        $resultado = [];
 
         $key = 'token';
         $token_ = self::get_value($key);
@@ -87,28 +83,34 @@ class ApiController extends Controller
             $token_ = self::get_value($key);
         }
 
-        $header = [ 'token' => $token_->token, ];
+        
+
+        
+
+        $header = [ 'token' => $token_, ];
 
         try {
 
-            $URL = $endpoint.'api/subfamilia' ;
+            $URL = self::$endpoint.'api/subfamilia' ;
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('get',$URL, [ 'headers' => $header ]);
 
             $resultado = $response->getBody()->getContents();
+            $resultado = json_decode($resultado);
 
+        
         } catch (\Throwable $th) {
             //throw $th;
+            
         }
-
         return $resultado;
 
     }
 
     public static function get_bodega_api() {
 
-        $resultado = false;
+        $resultado = [];
 
         $key = 'token';
         $token_ = self::get_value($key);
@@ -118,16 +120,17 @@ class ApiController extends Controller
             $token_ = self::get_value($key);
         }
 
-        $header = [ 'token' => $token_->token, ];
+        $header = [ 'token' => $token_, ];
 
         try {
 
-            $URL = $endpoint.'api/bodega' ;
+            $URL = self::$endpoint.'api/bodega' ;
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('get',$URL, [ 'headers' => $header ]);
 
             $resultado = $response->getBody()->getContents();
+            $resultado = json_decode($resultado);
 
         } catch (\Throwable $th) {
             //throw $th;
@@ -139,7 +142,7 @@ class ApiController extends Controller
 
     public static function get_forma_pago_api() {
 
-        $resultado = false;
+        $resultado = [];
 
         $key = 'token';
         $token_ = self::get_value($key);
@@ -149,16 +152,17 @@ class ApiController extends Controller
             $token_ = self::get_value($key);
         }
 
-        $header = [ 'token' => $token_->token, ];
+        $header = [ 'token' => $token_, ];
 
         try {
 
-            $URL = $endpoint.'api/formapago' ;
+            $URL = self::$endpoint.'api/formapago' ;
 
             $client = new \GuzzleHttp\Client();
             $response = $client->request('get',$URL, [ 'headers' => $header ]);
 
             $resultado = $response->getBody()->getContents();
+            $resultado = json_decode($resultado);
 
         } catch (\Throwable $th) {
             //throw $th;
@@ -252,7 +256,7 @@ class ApiController extends Controller
             $token_ = self::get_value($key);
         }
 
-        $bodega = 1;
+        $bodega = self::get_value('id_bodega');
 
         $header = [
             'Content-Type' => 'application/json',
@@ -271,7 +275,7 @@ class ApiController extends Controller
                 "Estado" => 1,
                 "Observacion" => "",
                 "formapago" => 1,
-                "Bodega" => 1,
+                "Bodega" => $bodega,
                 "Dia" => "03",
                 "Mes" => "11",
                 "Anio" => 2023,
