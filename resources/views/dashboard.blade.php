@@ -111,6 +111,8 @@
       const URL_CONSULTA_CLIENTE = "{{route('api.giftcard.codigobarra')}}"
       const URL_CONSULTA_CODIGO = "{{route('api.producto.especifico')}}"
       const IMAGEN_DEFECTO = "{{asset('assets/images/sinimagen.png')}}"
+
+      const ID_BODEGA = "{{$id_bodega}}"
     </script>
     <script src="{{asset('totem/script.js')}}"></script>
         

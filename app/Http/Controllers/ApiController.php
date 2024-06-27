@@ -334,7 +334,7 @@ class ApiController extends Controller
 
     }
 
-    public static function get_producto_especifico_api(string $codigo) {
+    public static function get_producto_especifico_api(string $codigo, int $id_bodega) {
 
         $resultado = false;
 
@@ -349,14 +349,11 @@ class ApiController extends Controller
         
         $tipo = "barra";
         
-        $idbodega = self::get_value('id_bodega');;
-
-
         $header = [
             'token' => $token_,
             'codigo' => $codigo,
             'tipo' => $tipo,
-            'idbodega' => $idbodega,
+            'idbodega' => $id_bodega,
         ];
 
         try {

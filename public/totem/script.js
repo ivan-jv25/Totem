@@ -1,5 +1,6 @@
 var listado_producto = []
 const observador = { valor: false };
+let cliente = null
 
 
 Object.defineProperty(observador, 'valor', {
@@ -27,29 +28,29 @@ window.onload=()=>{
     
     
     
-    consulta_codigo('189279027')
+    // consulta_codigo('189279027')
     
-    // Definir los intervalos y almacenar los identificadores devueltos por setInterval
-    const intervalo1 = setInterval(() => { buscar_producto('PROD001'); }, 2000);
-    const intervalo2 = setInterval(() => { buscar_producto('987654321'); }, 4000);
-    const intervalo3 = setInterval(() => { buscar_producto('1007001001'); }, 6000);
-    const intervalo4 = setInterval(() => { buscar_producto('PROD003'); }, 8000);
-    const intervalo5 = setInterval(() => { buscar_producto('PROD004'); }, 10000);
+    // // Definir los intervalos y almacenar los identificadores devueltos por setInterval
+    // const intervalo1 = setInterval(() => { buscar_producto('PROD001'); }, 2000);
+    // const intervalo2 = setInterval(() => { buscar_producto('987654321'); }, 4000);
+    // const intervalo3 = setInterval(() => { buscar_producto('1007001001'); }, 6000);
+    // const intervalo4 = setInterval(() => { buscar_producto('PROD003'); }, 8000);
+    // const intervalo5 = setInterval(() => { buscar_producto('PROD004'); }, 10000);
 
     
     
-    // Por ejemplo, cancelar el intervalo después de cierto tiempo (en este caso, 10 segundos)
-    setTimeout(() => {
-      clearInterval(intervalo1);
-      clearInterval(intervalo2);
-      clearInterval(intervalo3);
-      clearInterval(intervalo4);
-      clearInterval(intervalo5);
-      console.log('Intervalos cancelados.');
+    // // Por ejemplo, cancelar el intervalo después de cierto tiempo (en este caso, 10 segundos)
+    // setTimeout(() => {
+    //   clearInterval(intervalo1);
+    //   clearInterval(intervalo2);
+    //   clearInterval(intervalo3);
+    //   clearInterval(intervalo4);
+    //   clearInterval(intervalo5);
+    //   console.log('Intervalos cancelados.');
 
-    //   generar_pago()
+    // //   generar_pago()
       
-    }, 10000);
+    // }, 10000);
 
     
     
@@ -96,11 +97,9 @@ const existe_codigo = (_codigo) =>{
         .then(response=>response.json())
         .then(response=>{
 
+            cliente = response
             document.getElementById('sp_nombre_cliente').innerHTML = response.razon_social
-            resolve({
-                status:true,
-                razon_social:response.razon_social
-            })
+            resolve({ status:true, razon_social:response.razon_social })
         })
 
     })
@@ -161,7 +160,8 @@ const buscar_producto = (_codigo) =>{
 
     const obj = {
         _token:TOKEN_SESSION,
-        codigo_barra: _codigo
+        codigo_barra: _codigo,
+        id_bodega: ID_BODEGA
     }
 
     const options = { method: "POST", headers: { "Content-Type": "application/json" } , body:JSON.stringify(obj)};
@@ -271,12 +271,20 @@ const generar_pago = () =>{
         showConfirmButton:false
     });
 
+    const total = listado_producto.reduce((detalle, actual) =>{ return detalle = detalle + actual.total },0);
+    const obj = { correo :cliente.correo, total : total }
+
+    console.log(obj)
+     
+    try { lee.showPaymentPopup(JSON.stringify(obj)); } catch (error) { console.log(error) }
+
 }
 
 const observadorCallback = (nuevoValor) =>{
 
     console.log("se genero un cambio en el valor")
     console.log(nuevoValor)
+    let timerInterval;
 
     if(nuevoValor){
 
@@ -285,20 +293,65 @@ const observadorCallback = (nuevoValor) =>{
             text: "¡Gracias por elegirnos! Esperamos que disfrutes tu compra y que tengas un día maravilloso.",
             icon: "success",
             allowOutsideClick: false,
-            showConfirmButton:false
-          });
+            showConfirmButton:false,
+            timer: 5000,
+            timerProgressBar: true,
+            didOpen: () => {
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                    timer.textContent = `${Swal.getTimerLeft()}`;
+                }, 100);
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+            }
+        })
+        .then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+                console.log("I was closed by the timer");
+            }
+        });
+
+
+                  
+
+          
 
     }else{
+
 
         Swal.fire({
             title: "Pago Rechazado",
             text: "Lamentamos informarte que el pago ha sido rechazado. Por favor, intenta nuevamente o selecciona otro método de pago. Gracias por tu comprensión.",
             icon: "error",
             allowOutsideClick: false,
-            showConfirmButton:false
-          });
+            showConfirmButton:false,
+            timer: 5000,
+            timerProgressBar: true,
+            didOpen: () => {
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                    timer.textContent = `${Swal.getTimerLeft()}`;
+                }, 100);
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+            }
+        })
+        .then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+                console.log("I was closed by the timer");
+            }
+        });
+
+       
 
     }
+
+    listado_producto = []
+    lista_carro()
 
 }
 
@@ -312,5 +365,13 @@ const procesador_pago = (_algun_parametro)=>{
     }else{
         observador.valor = false
     }
+
+}
+
+function RespuestaTransaccion(_obj_response){
+
+    response = JSON.parse(_obj_response)
+
+    procesador_pago(response)
 
 }

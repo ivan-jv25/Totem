@@ -32,9 +32,21 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        return view('home');
+    public function index(){
+        $bodegas = DB::table('bodega')->select('id_bodega', 'nombre')->get();
+        
+
+        return view('home')->with('bodegas',$bodegas);
+    }
+
+    public function go_to_tienda(Request $request){
+
+        
+
+        $id_bodega = $request->tienda;
+
+
+        return view('dashboard')->with('id_bodega',$id_bodega);
     }
 
     public function iniciar_totem(){
@@ -103,8 +115,9 @@ class HomeController extends Controller
 
 
         $codigo_barra = (string)$request->codigo_barra;
+        $id_bodega = (int)$request->id_bodega;
 
-        $prod_especifico = \App\Http\Controllers\ApiController::get_producto_especifico_api($codigo_barra);
+        $prod_especifico = \App\Http\Controllers\ApiController::get_producto_especifico_api($codigo_barra, $id_bodega);
 
         $respuesta = count($prod_especifico) == 0 ? false : true;
         
@@ -116,6 +129,7 @@ class HomeController extends Controller
         $giftcard_codigobarra = \App\Http\Controllers\ApiController::get_giftcard_codigobarra_api($codigo);
 
         $giftcard_datos = \App\Http\Controllers\ApiController::get_datos_giftcard($giftcard_codigobarra);
+        
         return (array)$giftcard_datos;
     }
 

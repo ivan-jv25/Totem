@@ -17,9 +17,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+// Route::get('/dashboard', function () { return view('dashboard'); })->middleware(['auth'])->name('dashboard');
+
+Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'go_to_tienda'])->name('dashboard');
 
 Route::get('iniciar/totem', [App\Http\Controllers\HomeController::class, 'iniciar_totem'])->name('iniciar.totem');
 
@@ -37,10 +37,10 @@ Route::get('api/giftcard/codigobarra', [App\Http\Controllers\HomeController::cla
 Route::get('api/giftcard/datos', [App\Http\Controllers\HomeController::class, 'probar_api_giftcard_datos'])->name('api.giftcard.datos');
 
 
-Route::get('store/familia', [App\Http\Controllers\HomeController::class, 'store_familia'])->name('store.familia');
-Route::get('store/sub/familia', [App\Http\Controllers\HomeController::class, 'store_sub_familia'])->name('store.sub.familia');
-Route::get('store/bodega', [App\Http\Controllers\HomeController::class, 'store_bodega'])->name('store.bodega');
-Route::get('store/forma/pago', [App\Http\Controllers\HomeController::class, 'store_forma_pago'])->name('store.forma.pago');
+// Route::get('store/familia', [App\Http\Controllers\HomeController::class, 'store_familia'])->name('store.familia');
+// Route::get('store/sub/familia', [App\Http\Controllers\HomeController::class, 'store_sub_familia'])->name('store.sub.familia');
+// Route::get('store/bodega', [App\Http\Controllers\HomeController::class, 'store_bodega'])->name('store.bodega');
+// Route::get('store/forma/pago', [App\Http\Controllers\HomeController::class, 'store_forma_pago'])->name('store.forma.pago');
 
 Route::get('store/producto', [App\Http\Controllers\HomeController::class, 'store_producto'])->name('store.producto');
 Route::get('store/datos/venta', [App\Http\Controllers\HomeController::class, 'store_datos_venta'])->name('store.datos.venta');
