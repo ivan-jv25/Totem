@@ -10,7 +10,7 @@ use DB;
 class ApiController extends Controller
 {
 
-    public static $endpoint = 'http://192.168.1.101/';
+    public static $endpoint = 'http://192.168.1.7/';
 
     public static function get_info_usuario_api() {
 

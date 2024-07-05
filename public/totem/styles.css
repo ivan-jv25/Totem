@@ -279,3 +279,15 @@ div:where(.swal2-container) div:where(.swal2-popup) {
 .txt_sub_titulo_pago {
     font-size: 2rem;
 }
+
+
+.payment-option img {
+    width: 100px; /* Ajusta el tamaño de las imágenes según sea necesario */
+}
+.payment-container {
+    text-align: center;
+}
+
+#qrcode img{
+    vertical-align: middle !important;
+}

@@ -1,6 +1,7 @@
 var listado_producto = []
 const observador = { valor: false };
 let cliente = null
+var qrcode = null
 
 
 Object.defineProperty(observador, 'valor', {
@@ -22,13 +23,13 @@ window.onload=()=>{
 
     document.getElementById('txt_buscador_producto').addEventListener("keydown", handleKeyDown_producto);
 
-    document.getElementById("btn_genera_pago").addEventListener("click", generar_pago);
+    document.getElementById("btn_genera_pago").addEventListener("click", seleccion_pago);
 
 
     
     
     
-    // consulta_codigo('189279027')
+    // consulta_codigo('00000044')
     
     // // Definir los intervalos y almacenar los identificadores devueltos por setInterval
     // const intervalo1 = setInterval(() => { buscar_producto('PROD001'); }, 2000);
@@ -255,15 +256,49 @@ const lista_carro = ()=>{
     document.getElementById('sp_total').innerHTML = `${total}.-`
 }
 
+const seleccion_pago = () => {
 
-const generar_pago = () =>{
+    const total = listado_producto.reduce((detalle, actual) =>{ return detalle = detalle + actual.total },0);
+
+    if(total == 0){
+        Swal.fire({
+            title: "Sin Productos en Carro",
+            icon: "info",
+            text: "Por favor ingrese al menos un producto",
+           
+            showCancelButton: true,
+            focusConfirm: false,
+           
+          });
+
+          return
+    }
+
+
+    $("#paymentModal").modal();
+}
+
+const generar_pago = (_metodo_pago) =>{
+
+    $("#paymentModal").modal("hide");
 
     
     Swal.fire({
         title: `<strong class="txt_titulo_pago">Por favor, complete su pago para continuar</strong>`,
         html: `
             <img src="/assets/images/cargando.gif" style="width: auto;">
-            <br><br>
+            <br>
+            <br>
+            
+            <br>
+             <div class="row">
+                <div class="col-sm-4 p-3  text-white">.col</div>
+                <div class="col-sm-4 p-3 "><div id="qrcode" ></div></div>
+                <div class="col-sm-4 p-3  text-white">.col</div>
+               
+            </div>
+         
+            <p class="txt_sub_titulo_pago">Escanea el QR para genrar el Pago.</p><br>
             <p class="txt_sub_titulo_pago">Estamos esperando su confirmación de pago para procesar su solicitud.
             Gracias por su paciencia.</p>
         `,
@@ -272,11 +307,19 @@ const generar_pago = () =>{
     });
 
     const total = listado_producto.reduce((detalle, actual) =>{ return detalle = detalle + actual.total },0);
-    const obj = { correo :cliente.correo, total : total }
+    const obj = { correo :cliente.correo, total : total , tipo : _metodo_pago }
 
-    console.log(obj)
+    
+    qrcode = new QRCode(document.getElementById("qrcode"), {
+        width : 400,
+        height : 400
+    });
+
+    document.querySelector("#qrcode img").style.display = 'initial'
+   
+
      
-    try { lee.showPaymentPopup(JSON.stringify(obj)); } catch (error) { console.log(error) }
+    try { AndroidInterface.showPaymentPopup(JSON.stringify(obj)); } catch (error) { console.log(error) }
 
 }
 
@@ -374,4 +417,13 @@ function RespuestaTransaccion(_obj_response){
 
     procesador_pago(response)
 
+}
+
+const generar_qr_pago = (_URL_QR) =>{
+    qrcode.makeCode(_URL_QR);
+
+    document.querySelector("#qrcode img").style.display = 'initial'
+
+    
+    
 }

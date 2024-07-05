@@ -105,6 +105,35 @@
       <input type="text" id="txt_buscador_producto">
     </div>
 
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">Seleccione Método de Pago</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body payment-container">
+                    <p>Por favor, seleccione su método de pago preferido:</p>
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-light payment-option" onclick="generar_pago(2)">
+                            <img src="{{asset('assets/images/mercadopago-logo.png')}}" alt="Mercado Pago">
+                        </button>
+                        <button type="button" class="btn btn-light payment-option" onclick="generar_pago(1)">
+                            <img src="{{asset('assets/images/flow-logo.jpg')}}" alt="Flow">
+                        </button>
+                    </div>
+                    <!-- Aquí puedes agregar el QR que se generará después de la selección -->
+                    <div id="qr-container" class="mt-4"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 
     <script>
       const TOKEN_SESSION = '{{csrf_token()}}';
@@ -114,6 +143,8 @@
 
       const ID_BODEGA = "{{$id_bodega}}"
     </script>
+
+    <script src="{{asset('QR/qrcode.js')}}"></script>
     <script src="{{asset('totem/script.js')}}"></script>
         
   </body>
