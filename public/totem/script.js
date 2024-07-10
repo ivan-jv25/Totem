@@ -16,7 +16,7 @@ Object.defineProperty(observador, 'valor', {
   });
 
 window.onload=()=>{
-    
+
     set_focus_code()
     document.querySelector("body").addEventListener("click", set_focus_code);
     document.getElementById("input_code_cliente").addEventListener("keydown", handleKeyDown);
@@ -26,11 +26,9 @@ window.onload=()=>{
     document.getElementById("btn_genera_pago").addEventListener("click", seleccion_pago);
 
 
-    
-    
-    
+
     // consulta_codigo('00000044')
-    
+
     // // Definir los intervalos y almacenar los identificadores devueltos por setInterval
     // const intervalo1 = setInterval(() => { buscar_producto('PROD001'); }, 2000);
     // const intervalo2 = setInterval(() => { buscar_producto('987654321'); }, 4000);
@@ -38,8 +36,8 @@ window.onload=()=>{
     // const intervalo4 = setInterval(() => { buscar_producto('PROD003'); }, 8000);
     // const intervalo5 = setInterval(() => { buscar_producto('PROD004'); }, 10000);
 
-    
-    
+
+
     // // Por ejemplo, cancelar el intervalo después de cierto tiempo (en este caso, 10 segundos)
     // setTimeout(() => {
     //   clearInterval(intervalo1);
@@ -50,17 +48,17 @@ window.onload=()=>{
     //   console.log('Intervalos cancelados.');
 
     // //   generar_pago()
-      
+
     // }, 10000);
 
-    
-    
+
+
     // lista_carro()
 }
 
 
 function handleKeyDown(event) {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" || event.key === "Tab") {
         const _codigo = event.target.value
         consulta_codigo(_codigo)
     }
@@ -80,7 +78,7 @@ const consulta_codigo = async (_codigo) => {
     if(existe.status){
         document.querySelector("body").removeEventListener("click", set_focus_code);
         document.getElementById("input_code_cliente").removeEventListener("keydown", handleKeyDown);
-  
+
         mensaje_bienvenida(existe.razon_social)
         open_doors()
     }
@@ -91,13 +89,13 @@ const consulta_codigo = async (_codigo) => {
 const existe_codigo = (_codigo) =>{
 
     return new Promise((resolve, reject)=>{
-        let _url = new URL(URL_CONSULTA_CLIENTE)
-        _url.searchParams.append('codigo', _codigo)
 
-        fetch(_url)
+        const obj = { _token:TOKEN_SESSION, codigo: _codigo, }
+        const options = { method: "POST", headers: { "Content-Type": "application/json" } , body:JSON.stringify(obj)};
+
+        fetch(URL_CONSULTA_CLIENTE, options)
         .then(response=>response.json())
         .then(response=>{
-
             cliente = response
             document.getElementById('sp_nombre_cliente').innerHTML = response.razon_social
             resolve({ status:true, razon_social:response.razon_social })
@@ -128,7 +126,7 @@ const set_focus_code = () =>{
 }
 
 const set_focus_buscador_producto = () =>{
-    
+
     document.getElementById('txt_buscador_producto').value = ''
     document.getElementById('txt_buscador_producto').focus()
 
@@ -143,16 +141,16 @@ const open_doors = ()=>{
         document.getElementById("contenido").style.display = "block";
 
         setTimeout(function() {
-           door.remove()      
+           door.remove()
            //
            document.getElementById("contenido").classList.add('show_conteiner')
 
            document.querySelector("body").removeEventListener("click", set_focus_code);
            document.querySelector("body").addEventListener("click", set_focus_buscador_producto);
 
-           set_focus_buscador_producto()      
+           set_focus_buscador_producto()
         }, 1000);
-        
+
     }, 1000); // Cambia este valor al tiempo que desees antes de que las puertas desaparezcan
 }
 
@@ -166,7 +164,7 @@ const buscar_producto = (_codigo) =>{
     }
 
     const options = { method: "POST", headers: { "Content-Type": "application/json" } , body:JSON.stringify(obj)};
-      
+
         fetch(URL_CONSULTA_CODIGO, options)
         .then(response => response.json())
         .then(data =>{
@@ -230,9 +228,9 @@ const lista_carro = ()=>{
             <td style="width: 55%;" align="center">
                 <p class="mb-0 w-100 text-producto">${element.nombre}</p>
             </td>
-            
+
             <td style="width: 25%;" align="center">
-            
+
                 <div class="input-group my-2">
 
                     <button type="button" class="btn btn-dark"><i class="fa fa-minus"></i></button>
@@ -265,10 +263,10 @@ const seleccion_pago = () => {
             title: "Sin Productos en Carro",
             icon: "info",
             text: "Por favor ingrese al menos un producto",
-           
+
             showCancelButton: true,
             focusConfirm: false,
-           
+
           });
 
           return
@@ -282,22 +280,22 @@ const generar_pago = (_metodo_pago) =>{
 
     $("#paymentModal").modal("hide");
 
-    
+
     Swal.fire({
         title: `<strong class="txt_titulo_pago">Por favor, complete su pago para continuar</strong>`,
         html: `
             <img src="/assets/images/cargando.gif" style="width: auto;">
             <br>
             <br>
-            
+
             <br>
              <div class="row">
                 <div class="col-sm-4 p-3  text-white">.col</div>
                 <div class="col-sm-4 p-3 "><div id="qrcode" ></div></div>
                 <div class="col-sm-4 p-3  text-white">.col</div>
-               
+
             </div>
-         
+
             <p class="txt_sub_titulo_pago">Escanea el QR para genrar el Pago.</p><br>
             <p class="txt_sub_titulo_pago">Estamos esperando su confirmación de pago para procesar su solicitud.
             Gracias por su paciencia.</p>
@@ -309,16 +307,16 @@ const generar_pago = (_metodo_pago) =>{
     const total = listado_producto.reduce((detalle, actual) =>{ return detalle = detalle + actual.total },0);
     const obj = { correo :cliente.correo, total : total , tipo : _metodo_pago }
 
-    
+
     qrcode = new QRCode(document.getElementById("qrcode"), {
         width : 400,
         height : 400
     });
 
     document.querySelector("#qrcode img").style.display = 'initial'
-   
 
-     
+
+
     try { AndroidInterface.showPaymentPopup(JSON.stringify(obj)); } catch (error) { console.log(error) }
 
 }
@@ -357,9 +355,9 @@ const observadorCallback = (nuevoValor) =>{
         });
 
 
-                  
 
-          
+
+
 
     }else{
 
@@ -389,7 +387,7 @@ const observadorCallback = (nuevoValor) =>{
             }
         });
 
-       
+
 
     }
 
@@ -424,6 +422,6 @@ const generar_qr_pago = (_URL_QR) =>{
 
     document.querySelector("#qrcode img").style.display = 'initial'
 
-    
-    
+
+
 }

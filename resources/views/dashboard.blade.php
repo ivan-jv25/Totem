@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{asset('totem/styles.css')}}">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-  
+
 
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -23,7 +23,7 @@
 
   </head>
   <body>
-    
+
     <div class="container-fluid">
       <div class="row">
         <div class="col text-center btn-puerta">
@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-        
+
 
     <div class="door-container h-100">
       <div class="door">
@@ -43,9 +43,9 @@
       </div>
     </div>
 
-    
+
     <div id="contenido" class="container-fluid p-2 bgt"  style="display: none;">
-      
+
       <div class="banner">
         <div id="carouselExampleIndicators" class="carousel slide  h-100" data-ride="carousel">
           <div class="carousel-inner">
@@ -61,7 +61,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="listado bgt">
         <div class="col-12 d-flex align-items-stretch">
           <div class="card card-listado w-100 bgt">
@@ -115,9 +115,9 @@
                 <div class="modal-body payment-container">
                     <p>Por favor, seleccione su método de pago preferido:</p>
                     <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-light payment-option" onclick="generar_pago(2)">
+                        {{-- <button type="button" class="btn btn-light payment-option" onclick="generar_pago(2)">
                             <img src="{{asset('assets/images/mercadopago-logo.png')}}" alt="Mercado Pago">
-                        </button>
+                        </button> --}}
                         <button type="button" class="btn btn-light payment-option" onclick="generar_pago(1)">
                             <img src="{{asset('assets/images/flow-logo.jpg')}}" alt="Flow">
                         </button>
@@ -145,8 +145,8 @@
     </script>
 
     <script src="{{asset('QR/qrcode.js')}}"></script>
-    <script src="{{asset('totem/script.js')}}"></script>
-        
+    <script src="{{asset('totem/script.js?ver=1.1.1')}}"></script>
+
   </body>
 
 </html>

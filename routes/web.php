@@ -33,7 +33,7 @@ Route::get('api/producto/paginado', [App\Http\Controllers\HomeController::class,
 Route::post('api/producto', [App\Http\Controllers\HomeController::class, 'probar_api_producto'])->name('api.producto');
 Route::get('api/generar/venta', [App\Http\Controllers\HomeController::class, 'probar_api_generar_venta'])->name('api.generar.venta');
 Route::post('api/producto/especifico', [App\Http\Controllers\HomeController::class, 'probar_api_producto_especifico'])->name('api.producto.especifico');
-Route::get('api/giftcard/codigobarra', [App\Http\Controllers\HomeController::class, 'probar_api_giftcard_codigobarra'])->name('api.giftcard.codigobarra');
+Route::post('api/giftcard/codigobarra', [App\Http\Controllers\HomeController::class, 'probar_api_giftcard_codigobarra'])->name('api.giftcard.codigobarra');
 Route::get('api/giftcard/datos', [App\Http\Controllers\HomeController::class, 'probar_api_giftcard_datos'])->name('api.giftcard.datos');
 
 
