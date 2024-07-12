@@ -10,7 +10,8 @@ use DB;
 class ApiController extends Controller
 {
 
-    public static $endpoint = 'http://192.168.1.7/';
+    // public static $endpoint = 'http://onedte.cl/';
+    public static $endpoint = 'http://192.168.1.101/';
 
     public static function get_info_usuario_api() {
 
@@ -244,87 +245,107 @@ class ApiController extends Controller
 
     }
 
-    public static function generar_venta_api() {
+    public static function generar_venta_api(Request $request) {
 
+        try { date_default_timezone_set("America/Santiago"); } catch (\Throwable $th) { }
+
+        return [ 'status'=>true ];
+
+        // dd($request);
         $resultado = false;
 
-        $key = 'token';
-        $token_ = self::get_value($key);
+        $token_ = self::get_value('token');
 
         if ($token_ == null) {
             self::get_info_usuario_api();
-            $token_ = self::get_value($key);
+            $token_ = self::get_value('token');
         }
 
-        $bodega = self::get_value('id_bodega');
+        // dd($token_);
+        $bodega = (int)$request->id_bodega;
+        $cliente = $request->cliente;
+        $detalle_compra = $request->detalle;
+
+        $fecha_vencimiento = date("Y-m-d");
+        $dia = date('d');
+        $mes = date('m');
+        $anio = date('Y');
+        $mes = (strlen($mes) == 1) ? "0" . $mes : $mes;
+        $dia = (strlen($dia) == 1) ? "0" . $dia : $dia;
+
+
+
+
 
         $header = [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
-            'token' => $token_->token,
+            'token' => $token_,
             'id_bodega' => $bodega
         ];
 
+        $encabezado = (object)[
+            "Cliente" => $cliente['rut_cliente'],
+            "Documento" => 39,
+            "Estado" => 1,
+            "Observacion" => "",
+            "formapago" => 1,
+            "Bodega" => $bodega,
+            "Dia" => $dia,
+            "Mes" => $mes,
+            "Anio" => $anio,
+            "FechaVencimiento" => $fecha_vencimiento,
+            "Propina" => 0,
+            "Total" => 2000,
+            "IVA" => 319,
+            "NetoExento" => 0,
+            "NetoAfecto" => 1681,
+            "Descuento" => 0
+        ];
+        
+        $detalle = [];
+
+        $count = 1;
+        foreach ($detalle_compra as $key => $d) {
+            $detalle_aux = (object)[
+                "Item" => $count,
+                "Codigo" => $d['codigo'],
+                "id_producto" => $d['id'],
+                "Precio" => $d['precio_venta'],
+                "Cantidad" => $d['cantidad'],
+                "Descuento" => 0,
+                "Detallelargo" => "",
+                "Total" => $d['total'],
+            ];
+
+            $count++;
+
+            array_push($detalle, $detalle_aux);
+        }
+
+        dd($detalle);
+
+
+
+        $pago = [
+            (object)[
+                "Formapago" => 1,
+                "Total" => 1000
+            ]
+        ];
+
+        $json = (object)[ 'Encabezado' => $encabezado, 'Detalle' => $detalle, 'Pago' => $pago ];
+        $json  = json_encode($json);
+        dd($json);
+        
+        
+        
         try {
+            // $URL = $endpoint.'api/venta';
+            // $client = new \GuzzleHttp\Client();
+            // $response = $client->request('post', $URL, [ 'headers' => $header, 'body' => $json ]);
 
-            $URL = $endpoint.'api/venta';
-
-            $encabezado = (object)[
-                "Cliente" => "66666666-6",
-                "Documento" => 39,
-                "Estado" => 1,
-                "Observacion" => "",
-                "formapago" => 1,
-                "Bodega" => $bodega,
-                "Dia" => "03",
-                "Mes" => "11",
-                "Anio" => 2023,
-                "FechaVencimiento" => "2023-11-03",
-                "Propina" => 0,
-                "Total" => 2000,
-                "IVA" => 319,
-                "NetoExento" => 0,
-                "NetoAfecto" => 1681,
-                "Descuento" => 0
-            ];
-
-            $detalle = [
-                (object)[
-                    "Item" => 1,
-                    "Codigo" => "L0002",
-                    "id_producto" => 9,
-                    "Precio" => 1000,
-                    "Cantidad" => 1,
-                    "Descuento" => 0,
-                    "Detallelargo" => "",
-                    "Total" => 1000
-                ],
-                (object)[
-                    "Item" => 2,
-                    "Codigo" => "L0003",
-                    "id_producto" => 10,
-                    "Precio" => 100,
-                    "Cantidad" => 10,
-                    "Descuento" => 0,
-                    "Detallelargo" => "",
-                    "Total" => 1000
-                ]
-            ];
-
-            $pago = [
-                (object)[
-                    "Formapago" => 1,
-                    "Total" => 1000
-                ]
-            ];
-
-            $json = (object)[ 'Encabezado' => $encabezado, 'Detalle' => $detalle, 'Pago' => $pago ];
-            $json  = json_encode($json);
-
-            $client = new \GuzzleHttp\Client();
-            $response = $client->request('post', $URL, [ 'headers' => $header, 'body' => $json ]);
-
-            $resultado = $response->getBody()->getContents();
+            // $resultado = $response->getBody()->getContents();
 
         } catch (\Throwable $th) {
             //throw $th;
@@ -470,3 +491,4 @@ class ApiController extends Controller
     }
 
 }
+

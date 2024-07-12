@@ -54,10 +54,10 @@ class HomeController extends Controller
         $this->probar_api_info_usuario();
 
         // Rellena BD
-        $this->store_familia();
-        $this->store_sub_familia();
+        // $this->store_familia();
+        // $this->store_sub_familia();
         $this->store_bodega();
-        $this->store_forma_pago();
+        // $this->store_forma_pago();
 
 
         echo "Pre Carga de Informacion lista";

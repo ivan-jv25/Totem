@@ -13,7 +13,7 @@ Object.defineProperty(observador, 'valor', {
       this._valor = nuevoValor;
       observadorCallback(nuevoValor);
     }
-  });
+});
 
 window.onload=()=>{
 
@@ -27,7 +27,7 @@ window.onload=()=>{
 
 
 
-    // consulta_codigo('00000044')
+    // consulta_codigo('189279027')
 
     // // Definir los intervalos y almacenar los identificadores devueltos por setInterval
     // const intervalo1 = setInterval(() => { buscar_producto('PROD001'); }, 2000);
@@ -79,7 +79,7 @@ const consulta_codigo = async (_codigo) => {
         document.querySelector("body").removeEventListener("click", set_focus_code);
         document.getElementById("input_code_cliente").removeEventListener("keydown", handleKeyDown);
 
-        mensaje_bienvenida(existe.razon_social)
+        // mensaje_bienvenida(existe.razon_social)
         open_doors()
     }
 
@@ -96,6 +96,7 @@ const existe_codigo = (_codigo) =>{
         fetch(URL_CONSULTA_CLIENTE, options)
         .then(response=>response.json())
         .then(response=>{
+
             cliente = response
             document.getElementById('sp_nombre_cliente').innerHTML = response.razon_social
             resolve({ status:true, razon_social:response.razon_social })
@@ -329,30 +330,9 @@ const observadorCallback = (nuevoValor) =>{
 
     if(nuevoValor){
 
-        Swal.fire({
-            title: "¡Pago Exitoso!",
-            text: "¡Gracias por elegirnos! Esperamos que disfrutes tu compra y que tengas un día maravilloso.",
-            icon: "success",
-            allowOutsideClick: false,
-            showConfirmButton:false,
-            timer: 5000,
-            timerProgressBar: true,
-            didOpen: () => {
-                const timer = Swal.getPopup().querySelector("b");
-                timerInterval = setInterval(() => {
-                    timer.textContent = `${Swal.getTimerLeft()}`;
-                }, 100);
-            },
-            willClose: () => {
-                clearInterval(timerInterval);
-            }
-        })
-        .then((result) => {
-            /* Read more about handling dismissals below */
-            if (result.dismiss === Swal.DismissReason.timer) {
-                console.log("I was closed by the timer");
-            }
-        });
+        generar_venta()
+
+        
 
 
 
@@ -424,4 +404,55 @@ const generar_qr_pago = (_URL_QR) =>{
 
 
 
+}
+
+
+
+const generar_venta = () =>{
+
+
+
+
+    let obj = {
+        _token: TOKEN_SESSION,
+        cliente : cliente,
+        detalle : listado_producto,
+        id_bodega : ID_BODEGA
+    }
+
+
+    const options = { method: "POST", headers: { "Content-Type": "application/json" } , body:JSON.stringify(obj)};
+    fetch(URL_GENERAR_VENTA, options)
+    .then(response => response.json())
+    .then(response =>{
+        console.log(response)
+    })
+    .then(()=>{
+        Swal.fire({
+            title: "¡Pago Exitoso!",
+            text: "¡Gracias por elegirnos! Esperamos que disfrutes tu compra y que tengas un día maravilloso.",
+            icon: "success",
+            allowOutsideClick: false,
+            showConfirmButton:false,
+            timer: 5000,
+            timerProgressBar: true,
+            didOpen: () => {
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                    timer.textContent = `${Swal.getTimerLeft()}`;
+                }, 100);
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+            }
+        })
+        .then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+                console.log("I was closed by the timer");
+                window.location.reload()
+            }
+        });
+    })
+   
 }
