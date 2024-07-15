@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{asset('totem/styles.css')}}">
+    <link rel="stylesheet" href="{{asset('totem/styles.css?ver=1.1.4')}}">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
@@ -29,7 +29,7 @@
         <div class="col text-center btn-puerta">
           <img src="{{asset('totem/logo.png')}}" id="img_logo" class="img">
           <div class="input-group input-group-sm mb-3">
-            <input type="text" id="input_code_cliente" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            <!-- <input type="text" id="input_code_cliente" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"> -->
           </div>
         </div>
       </div>
@@ -67,16 +67,16 @@
           <div class="card card-listado w-100 bgt">
             <div class="card-body mt-5">
               <div class="row">
-                <h1 class="card-title text-center w-100">Bienvenido ! <span id="sp_nombre_cliente"></span></h1>
+                <h1 class="card-title text-center w-100">¡Bienvenido! <span id="sp_nombre_cliente"></span></h1>
               </div>
               <div class="table-responsive">
                 <table class="table table-striped  no-wrap v-middle">
                   <thead>
                     <tr class="border-0 text-center">
-                      <th class="border-0 fs-2">ITEM</th>
-                      <th colspan="2" class="border-0 fs-2">PRODUCTO</th>
-                      <th class="border-0 fs-2">CANTIDAD</th>
-                      <th class="border-0 fs-2">TOTAL</th>
+                      <th class="border-0 fs-4">ITEM</th>
+                      <th colspan="2" class="border-0 fs-4" style="padding-left: 4.5rem;">PRODUCTO</th>
+                      <th class="border-0 fs-4">CANTIDAD</th>
+                      <th class="border-0 fs-4">TOTAL</th>
                     </tr>
                   </thead>
                   <tbody id="tbody_carro"></tbody>
@@ -90,9 +90,9 @@
       <div class="pedido">
         <div class="col-12 d-flex ">
           <div class="card card-pedido w-100">
-            <div class="card-body button-group d-flex ">
-              <div class="mt-4">
-                <p>Total : <span id="sp_total">$0.-</span></p>
+            <div class="card-body button-group d-flex px-0">
+              <div class="mt-2">
+                <p style="padding-left: 7px;">Total : <span id="sp_total">$0.-</span></p>
               </div>
               <div class="ms-auto">
                 <button type="button" id="btn_genera_pago" class="btn  btn-lg btn-rounded btn-secondary btn-pago my-1">Pagar $</button>
@@ -102,7 +102,7 @@
         </div>
       </div>
 
-      <input type="text" id="txt_buscador_producto">
+      <!-- <input type="text" id="txt_buscador_producto"> -->
     </div>
 
     <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
@@ -146,7 +146,7 @@
     </script>
 
     <script src="{{asset('QR/qrcode.js')}}"></script>
-    <script src="{{asset('totem/script.js?ver=1.1.1')}}"></script>
+    <script src="{{asset('totem/script.js?ver=1.1.4')}}"></script>
 
   </body>
 

@@ -181,11 +181,12 @@ body {
 
 .btn-rounded {
     border-radius: 60px;
-    padding      : 7px 180px;
+    padding      : 0px 70px;
 }
 
 .btn-pago {
-    font-size: 3rem;
+    font-size: 2.5rem;
+    margin-right: 12px;
 }
 
 .carousel-inner {
@@ -242,7 +243,7 @@ body {
 }
 
 .text-producto {
-    font-size: 1.9rem;
+    font-size: 1.3rem;
 }
 
 .text-precio {
@@ -252,7 +253,7 @@ body {
 .rounded-circle {
     border-radius: 14% !important;
     width        : 90px;
-    height       : 90px;
+    height       : 80px;
 }
 
 .d-block {
@@ -273,7 +274,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
 }
 
 .txt_titulo_pago {
-    font-size: 4rem
+    font-size: 3rem
 }
 
 .txt_sub_titulo_pago {
@@ -290,4 +291,18 @@ div:where(.swal2-container) div:where(.swal2-popup) {
 
 #qrcode img{
     vertical-align: middle !important;
+}
+
+
+.swal2-title{
+    padding-top: 23px;
+    line-height: 32px;
+}
+
+.swal2-html-container{
+    margin-top: 17px;
+}
+
+#floatingInputGroup1{
+    font-size: 2rem !important;
 }

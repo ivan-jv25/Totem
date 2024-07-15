@@ -17,11 +17,13 @@ Object.defineProperty(observador, 'valor', {
 
 window.onload=()=>{
 
+    try { AndroidInterface.isGiftCard(JSON.stringify({ status : true })); } catch (error) { console.log(error) }
+
     set_focus_code()
     document.querySelector("body").addEventListener("click", set_focus_code);
-    document.getElementById("input_code_cliente").addEventListener("keydown", handleKeyDown);
+    // document.getElementById("input_code_cliente").addEventListener("keydown", handleKeyDown);
 
-    document.getElementById('txt_buscador_producto').addEventListener("keydown", handleKeyDown_producto);
+    // document.getElementById('txt_buscador_producto').addEventListener("keydown", handleKeyDown_producto);
 
     document.getElementById("btn_genera_pago").addEventListener("click", seleccion_pago);
 
@@ -54,6 +56,8 @@ window.onload=()=>{
 
 
     // lista_carro()
+
+    
 }
 
 
@@ -77,9 +81,10 @@ const consulta_codigo = async (_codigo) => {
 
     if(existe.status){
         document.querySelector("body").removeEventListener("click", set_focus_code);
-        document.getElementById("input_code_cliente").removeEventListener("keydown", handleKeyDown);
+        // document.getElementById("input_code_cliente").removeEventListener("keydown", handleKeyDown);
 
         // mensaje_bienvenida(existe.razon_social)
+        try { AndroidInterface.isGiftCard(JSON.stringify({ status : false })); } catch (error) { console.log(error) }
         open_doors()
     }
 
@@ -122,14 +127,14 @@ const mensaje_bienvenida=(_nombre)=>{
 
 const set_focus_code = () =>{
 
-    document.getElementById('input_code_cliente').value = ''
-    document.getElementById('input_code_cliente').focus()
+    // document.getElementById('input_code_cliente').value = ''
+    // document.getElementById('input_code_cliente').focus()
 }
 
 const set_focus_buscador_producto = () =>{
 
-    document.getElementById('txt_buscador_producto').value = ''
-    document.getElementById('txt_buscador_producto').focus()
+    // document.getElementById('txt_buscador_producto').value = ''
+    // document.getElementById('txt_buscador_producto').focus()
 
 }
 
@@ -222,7 +227,7 @@ const lista_carro = ()=>{
 
         _lista += `
         <tr class="border-2">
-            <td style="width: 5%;" >${count}</td>
+            <td style="width: 5%; font-size: 2.5rem;" align="center" >${count}</td>
             <td style="width: 10%;" align="center">
                 <img src="${element.imagen}" class="rounded-circle" width="100">
             </td>
@@ -234,13 +239,13 @@ const lista_carro = ()=>{
 
                 <div class="input-group my-2">
 
-                    <button type="button" class="btn btn-dark"><i class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-dark" hidden><i class="fa fa-minus"></i></button>
 
-                    <div class="form-floating">
+                    <div class="">
                         <input type="text" class="form-control text-center" id="floatingInputGroup1" value="${element.cantidad}">
                     </div>
 
-                    <button type="button" class="btn btn-dark"><i class="fa fa-plus"></i></button>
+                    <button type="button" class="btn btn-dark" hidden><i class="fa fa-plus"></i></button>
                 </div>
 
             </td>
@@ -285,40 +290,45 @@ const generar_pago = (_metodo_pago) =>{
     Swal.fire({
         title: `<strong class="txt_titulo_pago">Por favor, complete su pago para continuar</strong>`,
         html: `
-            <img src="/assets/images/cargando.gif" style="width: auto;">
-            <br>
-            <br>
-
-            <br>
+            <img src="/assets/images/cargando.gif" style="width: 230px;">
+            
              <div class="row">
-                <div class="col-sm-4 p-3  text-white">.col</div>
-                <div class="col-sm-4 p-3 "><div id="qrcode" ></div></div>
-                <div class="col-sm-4 p-3  text-white">.col</div>
+                <div class="col-sm-3 p-3  text-white">.col</div>
+                <div class="col-sm-6 p-3 "><div id="qrcode" ></div></div>
+                <div class="col-sm-3 p-3  text-white">.col</div>
 
             </div>
 
-            <p class="txt_sub_titulo_pago">Escanea el QR para genrar el Pago.</p><br>
+            <p class="txt_sub_titulo_pago">Escanea el QR para genrar el Pago.</p>
             <p class="txt_sub_titulo_pago">Estamos esperando su confirmación de pago para procesar su solicitud.
             Gracias por su paciencia.</p>
         `,
         allowOutsideClick: false,
-        showConfirmButton:false
-    });
+        showConfirmButton:false,
+        showCancelButton: true,
+        cancelButtonColor: "#d33",
+    })
+    .then((result) => {
+        if (!result.isConfirmed) {
+            try { AndroidInterface.stopPayment(JSON.stringify({ status : true })); } catch (error) { console.log(error) }
+        }
+      })
+    ;
 
     const total = listado_producto.reduce((detalle, actual) =>{ return detalle = detalle + actual.total },0);
-    const obj = { correo :cliente.correo, total : total , tipo : _metodo_pago }
+    const obj = { correo :'ivanandres.hj@gmail.com', total : total , tipo : _metodo_pago }
 
 
     qrcode = new QRCode(document.getElementById("qrcode"), {
-        width : 400,
-        height : 400
+        width : 300,
+        height : 300
     });
 
     document.querySelector("#qrcode img").style.display = 'initial'
 
 
 
-    try { AndroidInterface.showPaymentPopup(JSON.stringify(obj)); } catch (error) { console.log(error) }
+    try { AndroidInterface.makePayment(JSON.stringify(obj)); } catch (error) { console.log(error) }
 
 }
 
@@ -331,12 +341,6 @@ const observadorCallback = (nuevoValor) =>{
     if(nuevoValor){
 
         generar_venta()
-
-        
-
-
-
-
 
 
     }else{
