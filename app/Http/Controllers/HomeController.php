@@ -33,7 +33,7 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(){
-        $bodegas = DB::table('bodega')->select('id_bodega', 'nombre')->get();
+        $bodegas = Bodega::select('id_bodega', 'nombre')->get();
         
 
         return view('home')->with('bodegas',$bodegas);

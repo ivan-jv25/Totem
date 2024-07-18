@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Configuraciones;
+use App\Models\Token;
 use DB;
 
 class ApiController extends Controller
 {
 
-    public static $endpoint = 'http://onedte.cl/';
-    // public static $endpoint = 'http://192.168.1.101/';
+    // public static $endpoint = 'http://onedte.cl/';
+    public static $endpoint = 'http://192.168.1.101/';
 
     public static function get_info_usuario_api() {
 
@@ -45,6 +46,52 @@ class ApiController extends Controller
         } catch (\Throwable $th) { }
 
         return $resultado;
+    }
+
+    public function login_usuario(Request $request){
+
+        $empresa  =  config('app.AUTH')['EMPRESA_TEST'];
+        $username = $request->username;
+        $password = $request->password;
+        $id_bodega_utilizar = (int)$request->id_bodega;
+
+
+        $header = [ 'Content-Type' => 'application/json', 'Accept' => 'application/json', ];
+
+        try {
+
+            $URL = self::$endpoint.'api/login';
+            $json = (object)[ 'empresa' => $empresa, 'username' => $username, 'password' => $password ];
+            $json  = json_encode($json);
+
+            $client = new \GuzzleHttp\Client();
+            $response = $client->request('post', $URL, [ 'headers' => $header, 'body' => $json ]);
+
+            $resultado = $response->getBody()->getContents();
+            $resultado = json_decode($resultado);
+
+            $token_    = $resultado[0]->Token;
+            $id_bodega = (int)$resultado[0]->id_bodega;
+
+            if($id_bodega != $id_bodega_utilizar){ return [ 'status'=>false ]; }
+
+            $token = Token::select()->where('id_bodega', $id_bodega)->first();
+
+            if($token == null){
+                $token = new Token();
+                $token->id_bodega = $id_bodega;
+                $token->token = $token_;
+            }else{
+                $token->token = $token_;
+            }
+            $token->save();
+
+
+            return [ 'status'=>true ]; 
+
+        } catch (\Throwable $th) { dd($th); }
+
+        return [ 'status'=>false ]; 
     }
 
     public static function get_familia_api() {

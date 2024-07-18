@@ -16,14 +16,17 @@
 
                     <form method="GET" action="{{ route('dashboard') }}" >
 
+                        @if($b->get_token != null)
                         <div class="d-grid gap-2 mb-3">
                             <input type="text" name="tienda" value="{{$b->id_bodega}}" hidden>
                             <button class="btn btn-primary" type="submit">Ir a Tienda</button>
 
                         </div>
+                        @else
                         <div class="d-grid gap-2">
                             <a class="btn btn-secondary" onclick="modal_configuracion({{$b->id_bodega}})" >Configuracion</a>
                         </div>
+                        @endif
                     </form>
 
                 </div>
@@ -52,11 +55,15 @@
                 <div class="d-grid gap-2">
 
                     <div class="d-grid gap-2">
-                        <input type="email" placeholder="Email@mail.com" name="id_correo_configuracion" id="id_correo_configuracion" autocomplete="off">
+                        <input type="text" placeholder="Username"  id="id_correo_configuracion" autocomplete="off">
                     </div>
 
                     <div class="d-grid gap-2">
-                        <input type="password" placeholder="Contraseña..." name="id_contrasena_configuracion" id="id_contrasena_configuracion">
+                        <input type="password" placeholder="Contraseña..." id="id_contrasena_configuracion">
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a id="btn_envio_data_bodega_token" class="btn btn-primary" >Enviar</a>
                     </div>
 
                 </div>
@@ -73,5 +80,10 @@
 
 
 <script src="{{asset('totem/configuracion.js')}}"></script>
+
+<script>
+    const TOKEN_SESSION = '{{csrf_token()}}';
+    const URL_TOKEN_BODEGA = "{{route('api.token.bodega')}}"
+</script>
 
 @endsection
