@@ -22,7 +22,8 @@
 
     <link rel="stylesheet" href="{{asset('assets\css\all.css')}}">
 
-    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
 </head>
 <body>
     <div id="app">
@@ -36,7 +37,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->
