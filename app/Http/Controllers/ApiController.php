@@ -300,8 +300,9 @@ class ApiController extends Controller
 
         // dd($request);
         $resultado = false;
+        $bodega = (int)$request->id_bodega;
 
-        $token_ = self::get_value('token');
+        $token_ = self::get_token_by_bodega($id_bodega);
 
         if ($token_ == null) {
             self::get_info_usuario_api();
@@ -309,7 +310,7 @@ class ApiController extends Controller
         }
 
         // dd($token_);
-        $bodega = (int)$request->id_bodega;
+        
         $cliente = $request->cliente;
         $detalle_compra = $request->detalle;
 
@@ -536,6 +537,16 @@ class ApiController extends Controller
         $configuracion = DB::table('configuraciones')->select('token')->where($where)->first();
         return $configuracion == null ? null : $configuracion->token;
     }
+
+    private function get_token_by_bodega(int $id_bodega){
+
+        $where = [ ['id_bodega', $id_bodega] ];
+        $configuracion = DB::table('bodega_token')->select('token')->where($where)->first();
+        return $configuracion == null ? null : $configuracion->token;
+
+    }
+
+
 
 }
 
