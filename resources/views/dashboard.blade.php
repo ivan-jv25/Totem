@@ -147,7 +147,7 @@
     </script>
 
     <script src="{{asset('QR/qrcode.js')}}"></script>
-    <script src="{{asset('totem/script.js?ver=1.1.5')}}"></script>
+    <script src="{{asset('totem/script.js?ver=1.1.6')}}"></script>
 
   </body>
 
