@@ -493,6 +493,8 @@ const generar_venta = () =>{
         }
 
 
+        console.log(JSON.stringify(_json))
+
         try { AndroidInterface.imprimirDocumento(JSON.stringify(_json)); } catch (error) { console.log(error) }
 
     })
