@@ -95,6 +95,7 @@
                 <p style="padding-left: 7px;">Total : <span id="sp_total">$0.-</span></p>
               </div>
               <div class="ms-auto">
+                <button type="button" id="" class="btn btn-lg btn-rounded btn-danger btn-pago my-1" onclick="limpiar_carro()">Limpiar Carro</button>
                 <button type="button" id="btn_genera_pago" class="btn  btn-lg btn-rounded btn-secondary btn-pago my-1">Pagar $</button>
               </div>
             </div>
@@ -146,7 +147,7 @@
     </script>
 
     <script src="{{asset('QR/qrcode.js')}}"></script>
-    <script src="{{asset('totem/script.js?ver=1.1.4')}}"></script>
+    <script src="{{asset('totem/script.js?ver=1.1.5')}}"></script>
 
   </body>
 

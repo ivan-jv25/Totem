@@ -57,7 +57,7 @@ window.onload=()=>{
 
     // lista_carro()
 
-    
+
 }
 
 
@@ -297,7 +297,7 @@ const generar_pago = (_metodo_pago) =>{
         title: `<strong class="txt_titulo_pago">Por favor, complete su pago para continuar</strong>`,
         html: `
             <img src="/assets/images/cargando.gif" style="width: 230px;">
-            
+
              <div class="row">
                 <div class="col-sm-3 p-3  text-white">.col</div>
                 <div class="col-sm-6 p-3 "><div id="qrcode" ></div></div>
@@ -526,5 +526,13 @@ const generar_venta = () =>{
     .catch((error)=>{
         alert("eRoRr!!!")
     })
-   
+
+}
+
+const limpiar_carro = () => {
+    
+    listado_producto = []
+
+    lista_carro()
+
 }
