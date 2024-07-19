@@ -102,9 +102,14 @@ const existe_codigo = (_codigo) =>{
         .then(response=>response.json())
         .then(response=>{
 
-            cliente = response
-            document.getElementById('sp_nombre_cliente').innerHTML = response.razon_social
-            resolve({ status:true, razon_social:response.razon_social })
+            if(response.status){
+                cliente = response.data
+                document.getElementById('sp_nombre_cliente').innerHTML = cliente.razon_social
+                resolve({ status:response.status, razon_social:cliente.razon_social })
+
+            }else{
+                reject({ status:false})
+            }
         })
 
     })
@@ -201,7 +206,8 @@ const agregar_producto = (_producto) => {
             codigo : _producto.codigo,
             codigo_barra : _producto.codigo_barra,
             imagen : _producto.imagen,
-            precio_venta :_producto.precio_venta
+            precio_venta :_producto.precio_venta,
+            descuento :0
         }
 
         listado_producto.push(obj_producto)
@@ -384,12 +390,14 @@ const procesador_pago = (_algun_parametro)=>{
 
     const estado_pago = _algun_parametro.status
 
-    if(estado_pago){
-        observador.valor = true
+    observador.valor = estado_pago
 
-    }else{
-        observador.valor = false
-    }
+    // if(estado_pago){
+    //     observador.valor = true
+
+    // }else{
+    //     observador.valor = false
+    // }
 
 }
 
@@ -415,21 +423,78 @@ const generar_qr_pago = (_URL_QR) =>{
 const generar_venta = () =>{
 
 
+    let total = listado_producto.reduce((detalle, actual) =>{ return detalle = detalle + actual.total },0);
+    let neto = parseInt(total /1.19)
+    let iva = neto * 0.19
+
+    const montos = {
+        total : total,
+        neto : neto,
+        iva : iva
+    }
 
 
     let obj = {
         _token: TOKEN_SESSION,
         cliente : cliente,
         detalle : listado_producto,
-        id_bodega : ID_BODEGA
+        id_bodega : ID_BODEGA,
+        montos : montos
     }
 
+
+    const detalle_final = listado_producto.reduce((detalle, actual) =>{
+
+        const _obj = {
+            total:actual.total,
+            cantidad:actual.cantidad,
+            descripcion:actual.nombre,
+            descuento:actual.descuento,
+        }
+
+        detalle.push(_obj)
+
+
+        return detalle
+
+    },[]);
 
     const options = { method: "POST", headers: { "Content-Type": "application/json" } , body:JSON.stringify(obj)};
     fetch(URL_GENERAR_VENTA, options)
     .then(response => response.json())
     .then(response =>{
         console.log(response)
+
+        if(!response.status){
+            throw "Error!!! "
+        }
+
+        const _dte =response.dte
+
+        const _json = {
+            razon_social:'razon_social',
+            rut_empresa:'razon_social',
+            sii_1:'razon_social',
+            giro:'razon_social',
+            direccion:'razon_social',
+            fecha:response.fecha,
+            hora:response.hora,
+            tipo_doc:'razon_social',
+            folio:_dte.numVenta,
+            cliente:'razon_social',
+            sii_2:'razon_social',
+            descuento:'BOLETA ELECTRONICA',
+            neto:montos.neto,
+            iva:montos.iva,
+            forma_pago:'razon_social',
+            total:montos.total,
+            pdf417:_dte.pdf417,
+            detalle:detalle_final,
+        }
+
+
+        try { AndroidInterface.imprimirDocumento(JSON.stringify(_json)); } catch (error) { console.log(error) }
+
     })
     .then(()=>{
         Swal.fire({
@@ -454,9 +519,12 @@ const generar_venta = () =>{
             /* Read more about handling dismissals below */
             if (result.dismiss === Swal.DismissReason.timer) {
                 console.log("I was closed by the timer");
-                window.location.reload()
+                // window.location.reload()
             }
         });
+    })
+    .catch((error)=>{
+        alert("eRoRr!!!")
     })
    
 }

@@ -4,23 +4,17 @@
 <div class="container">
     <div class="row ">
 
-
         @foreach ($bodegas as $b)
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-header">Tienda : <span class="text-uppercase fw-bold">{{ $b->nombre }}</span></div>
 
                 <div class="card-body">
-
-
-
                     <form method="GET" action="{{ route('dashboard') }}" >
-
                         @if($b->get_token != null)
                         <div class="d-grid gap-2 mb-3">
                             <input type="text" name="tienda" value="{{$b->id_bodega}}" hidden>
                             <button class="btn btn-primary" type="submit">Ir a Tienda</button>
-
                         </div>
                         @else
                         <div class="d-grid gap-2">
@@ -34,11 +28,7 @@
         </div>
         @endforeach
 
-
-
-
     </div>
-
 </div>
 
 <div class="modal fade" id="ModalConfiguracion" tabindex="-1" aria-labelledby="ModalConfiguracionLabel" aria-hidden="true">

@@ -128,9 +128,22 @@ class HomeController extends Controller
         $codigo = (string)$request->codigo;
         $giftcard_codigobarra = \App\Http\Controllers\ApiController::get_giftcard_codigobarra_api($codigo);
 
-        $giftcard_datos = \App\Http\Controllers\ApiController::get_datos_giftcard($giftcard_codigobarra);
+        if($giftcard_codigobarra == null){
+            return [ 'status'=>false ];
+        }
         
-        return (array)$giftcard_datos;
+
+        $giftcard_datos = \App\Http\Controllers\ApiController::get_datos_giftcard($giftcard_codigobarra);
+
+        if($giftcard_codigobarra == null){
+            return [ 'status'=>false ];
+        }
+
+        return [
+            'status'=>true,
+            'data'=>$giftcard_datos
+        ];
+        
     }
 
     public function probar_api_giftcard_datos() {

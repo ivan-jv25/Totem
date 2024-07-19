@@ -296,13 +296,12 @@ class ApiController extends Controller
 
         try { date_default_timezone_set("America/Santiago"); } catch (\Throwable $th) { }
 
-        return [ 'status'=>true ];
-
         // dd($request);
-        $resultado = false;
-        $bodega = (int)$request->id_bodega;
+        $response = false;
+        $id_bodega = (int)$request->id_bodega;
 
         $token_ = self::get_token_by_bodega($id_bodega);
+        
 
         if ($token_ == null) {
             self::get_info_usuario_api();
@@ -313,6 +312,7 @@ class ApiController extends Controller
         
         $cliente = $request->cliente;
         $detalle_compra = $request->detalle;
+        $montos = $request->montos;
 
         $fecha_vencimiento = date("Y-m-d");
         $dia = date('d');
@@ -321,15 +321,11 @@ class ApiController extends Controller
         $mes = (strlen($mes) == 1) ? "0" . $mes : $mes;
         $dia = (strlen($dia) == 1) ? "0" . $dia : $dia;
 
-
-
-
-
         $header = [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
             'token' => $token_,
-            'id_bodega' => $bodega
+            'id_bodega' => $id_bodega
         ];
 
         $encabezado = (object)[
@@ -338,16 +334,16 @@ class ApiController extends Controller
             "Estado" => 1,
             "Observacion" => "",
             "formapago" => 1,
-            "Bodega" => $bodega,
+            "Bodega" => $id_bodega,
             "Dia" => $dia,
             "Mes" => $mes,
             "Anio" => $anio,
             "FechaVencimiento" => $fecha_vencimiento,
             "Propina" => 0,
-            "Total" => 2000,
-            "IVA" => 319,
+            "Total" => $montos['total'],
+            "IVA" => $montos['iva'],
             "NetoExento" => 0,
-            "NetoAfecto" => 1681,
+            "NetoAfecto" => $montos['neto'],
             "Descuento" => 0
         ];
         
@@ -371,35 +367,35 @@ class ApiController extends Controller
             array_push($detalle, $detalle_aux);
         }
 
-        dd($detalle);
-
-
-
         $pago = [
             (object)[
                 "Formapago" => 1,
-                "Total" => 1000
+                "Total" => $montos['total']
             ]
         ];
 
         $json = (object)[ 'Encabezado' => $encabezado, 'Detalle' => $detalle, 'Pago' => $pago ];
         $json  = json_encode($json);
-        dd($json);
-        
-        
         
         try {
-            // $URL = $endpoint.'api/venta';
-            // $client = new \GuzzleHttp\Client();
-            // $response = $client->request('post', $URL, [ 'headers' => $header, 'body' => $json ]);
+            $URL = self::$endpoint.'api/venta';
+            $client = new \GuzzleHttp\Client();
+            $response = $client->request('post', $URL, [ 'headers' => $header, 'body' => $json ]);
 
-            // $resultado = $response->getBody()->getContents();
+            $response = $response->getBody()->getContents();
+
+            $response = json_decode($response);
 
         } catch (\Throwable $th) {
             //throw $th;
         }
 
-        return $resultado;
+        return [
+            'status'=>true,
+            'fecha'=>date("Y-m-d"),
+            'hora'=>date("H:i"),
+            'dte'=>$response
+        ];
 
     }
 
@@ -478,6 +474,7 @@ class ApiController extends Controller
 
         } catch (\Throwable $th) {
 
+            $resultado = null;
             //throw $th;
         }
 
@@ -487,7 +484,7 @@ class ApiController extends Controller
 
     public static function get_datos_giftcard(string $token_giftcard) {
 
-        $resultado = false;
+        $resultado = null;
 
         $token_ = self::get_value('token');
 
@@ -514,7 +511,7 @@ class ApiController extends Controller
             
 
         } catch (\Throwable $th) {
-
+            $resultado = null;
             //throw $th;
         }
 
