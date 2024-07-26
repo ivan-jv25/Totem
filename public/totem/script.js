@@ -25,41 +25,8 @@ window.onload=()=>{
 
     // document.getElementById('txt_buscador_producto').addEventListener("keydown", handleKeyDown_producto);
 
-    // document.getElementById("btn_genera_pago").addEventListener("click", seleccion_pago);
-    document.getElementById("btn_genera_pago").addEventListener("click", generar_venta_aux);
-
-    
-
-
-
-    // consulta_codigo('189279027')
-
-    // // Definir los intervalos y almacenar los identificadores devueltos por setInterval
-    // const intervalo1 = setInterval(() => { buscar_producto('PROD001'); }, 2000);
-    // const intervalo2 = setInterval(() => { buscar_producto('987654321'); }, 4000);
-    // const intervalo3 = setInterval(() => { buscar_producto('1007001001'); }, 6000);
-    // const intervalo4 = setInterval(() => { buscar_producto('PROD003'); }, 8000);
-    // const intervalo5 = setInterval(() => { buscar_producto('PROD004'); }, 10000);
-
-
-
-    // // Por ejemplo, cancelar el intervalo después de cierto tiempo (en este caso, 10 segundos)
-    // setTimeout(() => {
-    //   clearInterval(intervalo1);
-    //   clearInterval(intervalo2);
-    //   clearInterval(intervalo3);
-    //   clearInterval(intervalo4);
-    //   clearInterval(intervalo5);
-    //   console.log('Intervalos cancelados.');
-
-    // //   generar_pago()
-
-    // }, 10000);
-
-
-
-    // lista_carro()
-
+    document.getElementById("btn_genera_pago").addEventListener("click", seleccion_pago);
+    // document.getElementById("btn_genera_pago").addEventListener("click", generar_venta_aux);
 
 }
 
