@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <title>Animación de Puerta</title>
+    <title>Totem</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -134,6 +134,33 @@
     </div>
 
 
+    <div class="modal fade" id="QrRegistro" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h5 class="modal-title w-100 text-center" id="paymentModalLabel">Registro de Clientes</h5>    
+                </div>
+                <div class="modal-body payment-container">
+                    <div id="qr-container-registro" class="mx-5"></div>
+                </div>
+                <div class="modal-body payment-container">
+                  <p>Registrese </p>
+                </div>
+
+                <div class="modal-body payment-container">
+                  <div class="d-grid gap-2 mt-5">
+                    <button onclick="location.reload()" class="btn btn-lg  btn-primary">Ya te registraste?</button>
+                  </div>
+                </div>
+                  
+                
+            </div>
+        </div>
+    </div>
+
+
+
+
 
 
     <script>
@@ -144,6 +171,10 @@
       const URL_GENERAR_VENTA ="{{route('api.generar.venta')}}"
 
       const ID_BODEGA = "{{$id_bodega}}"
+
+      const URL_QR = "{{route('registro.cliente')}}"
+
+
     </script>
 
     <script src="{{asset('QR/qrcode.js')}}"></script>

@@ -1,0 +1,24 @@
+body {
+    height    : 100vh;
+    animation : show_conteiner 2s forwards;
+    border    : 20px solid #fedbd5;
+    background: radial-gradient(circle, #FFF, #fedbd594);
+}
+
+
+
+@keyframes show_conteiner {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+body {
+    font-family     : 'SoDo Sans SemiBold';
+    background-color: #eef5f9;
+}

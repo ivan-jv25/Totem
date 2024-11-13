@@ -48,7 +48,7 @@ function handleKeyDown_producto(event) {
 const consulta_codigo = async (_codigo) => {
 
     const existe = await existe_codigo(_codigo)
-
+    
     if(existe.status){
         document.querySelector("body").removeEventListener("click", set_focus_code);
         // document.getElementById("input_code_cliente").removeEventListener("keydown", handleKeyDown);
@@ -56,6 +56,16 @@ const consulta_codigo = async (_codigo) => {
         // mensaje_bienvenida(existe.razon_social)
         try { AndroidInterface.isGiftCard(JSON.stringify({ status : false })); } catch (error) { console.log(error) }
         open_doors()
+    }else{
+        let _url = new URL(URL_QR)
+        _url.searchParams.append('codigo', _codigo)
+
+        qrcode = new QRCode(document.getElementById("qr-container-registro"), { width : 300, height : 300 });
+
+        qrcode.makeCode(_url);
+        document.querySelector("#qr-container-registro img").style.display = 'initial'
+        
+        $("#QrRegistro").modal();
     }
 
 }
@@ -78,7 +88,7 @@ const existe_codigo = (_codigo) =>{
                 resolve({ status:response.status, razon_social:cliente.razon_social })
 
             }else{
-                reject({ status:false})
+                resolve({ status:false})
             }
         })
 
@@ -108,8 +118,8 @@ const set_focus_code = () =>{
 
 const set_focus_buscador_producto = () =>{
 
-    // document.getElementById('txt_buscador_producto').value = ''
-    // document.getElementById('txt_buscador_producto').focus()
+    document.getElementById('txt_buscador_producto').value = ''
+    document.getElementById('txt_buscador_producto').focus()
 
 }
 
@@ -292,7 +302,7 @@ const generar_pago = (_metodo_pago) =>{
     ;
 
     const total = listado_producto.reduce((detalle, actual) =>{ return detalle = detalle + actual.total },0);
-    const obj = { correo :'ivanandres.hj@gmail.com', total : total , tipo : _metodo_pago }
+    const obj = { correo :cliente.correo, total : total , tipo : _metodo_pago }
 
 
     qrcode = new QRCode(document.getElementById("qrcode"), {

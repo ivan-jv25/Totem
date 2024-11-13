@@ -21,7 +21,7 @@ Route::get('/', function () {
 
 Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'go_to_tienda'])->name('dashboard');
 
-Route::get('iniciar/totem', [App\Http\Controllers\HomeController::class, 'iniciar_totem'])->name('iniciar.totem');
+Route::get('iniciar/totem', [App\Http\Controllers\HomeController::class, 'iniciar_totem'])->name('iniciar.totem'); // Para Iniciar la WEa
 
 Route::get('api/info/usuario', [App\Http\Controllers\HomeController::class, 'probar_api_info_usuario'])->name('api.info.usuario');
 
@@ -38,10 +38,6 @@ Route::post('api/giftcard/codigobarra', [App\Http\Controllers\HomeController::cl
 Route::get('api/giftcard/datos', [App\Http\Controllers\HomeController::class, 'probar_api_giftcard_datos'])->name('api.giftcard.datos');
 
 Route::post('api/generar/venta', [App\Http\Controllers\ApiController::class, 'generar_venta_api'])->name('api.generar.venta');
-// Route::get('store/familia', [App\Http\Controllers\HomeController::class, 'store_familia'])->name('store.familia');
-// Route::get('store/sub/familia', [App\Http\Controllers\HomeController::class, 'store_sub_familia'])->name('store.sub.familia');
-// Route::get('store/bodega', [App\Http\Controllers\HomeController::class, 'store_bodega'])->name('store.bodega');
-// Route::get('store/forma/pago', [App\Http\Controllers\HomeController::class, 'store_forma_pago'])->name('store.forma.pago');
 
 Route::get('store/producto', [App\Http\Controllers\HomeController::class, 'store_producto'])->name('store.producto');
 Route::get('store/datos/venta', [App\Http\Controllers\HomeController::class, 'store_datos_venta'])->name('store.datos.venta');
@@ -51,3 +47,6 @@ Route::get('store/datos/venta', [App\Http\Controllers\HomeController::class, 'st
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/Registro', [App\Http\Controllers\ClienteController::class, 'index'])->name('registro.cliente');
+Route::post('Registro/Cliente', [App\Http\Controllers\ClienteController::class, 'registro_cliente'])->name('registro.cliente.store');

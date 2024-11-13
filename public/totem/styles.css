@@ -293,6 +293,10 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     vertical-align: middle !important;
 }
 
+#qr-container-registro img{
+    vertical-align: middle !important;
+}
+
 
 .swal2-title{
     padding-top: 23px;

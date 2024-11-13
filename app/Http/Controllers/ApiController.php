@@ -11,8 +11,8 @@ use DB;
 class ApiController extends Controller
 {
 
-    public static $endpoint = 'http://onedte.cl/';
-    // public static $endpoint = 'http://192.168.1.101/';
+    // public static $endpoint = 'http://onedte.cl/';
+    public static $endpoint = 'http://192.168.1.101/';
 
     public static function get_info_usuario_api() {
 
@@ -518,6 +518,127 @@ class ApiController extends Controller
         return $resultado;
 
     }
+
+    public static function existe_cliente(string $rut_cliente){
+
+        $resultado = null;
+
+        $token_ = self::get_value('token');
+
+        if ($token_ == null) {
+            self::get_info_usuario_api();
+            $token_ = self::get_value('token');
+        }
+        $header = [ 'token' => $token_ ];
+
+        try {
+
+            $URL = self::$endpoint.'api/cliente/'.$rut_cliente ;
+
+            $client    = new \GuzzleHttp\Client();
+            $response  = $client->request('get',$URL, [ 'headers' => $header ]);
+            $resultado = $response->getBody()->getContents();
+            $resultado = json_decode($resultado);
+
+        } catch (\Throwable $th) {
+            $resultado = null;
+            //throw $th;
+        }
+
+        return $resultado;        
+    }
+
+    public static function generar_giftcard(string $rut_cliente, string $codigo) {
+
+        try { date_default_timezone_set("America/Santiago"); } catch (\Throwable $th) { }
+
+        $response = false;
+
+        $resultado = null;
+
+        $token_ = self::get_value('token');
+
+        if ($token_ == null) {
+            self::get_info_usuario_api();
+            $token_ = self::get_value('token');
+        }
+
+
+        $header = [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'token' => $token_,
+        ];
+
+        $json = (object)[ 'rut_cliente' => $rut_cliente, 'codigo' => $codigo ];
+        $json  = json_encode($json);
+        
+        try {
+            $URL = self::$endpoint.'api/giftcard/generar';
+            $client = new \GuzzleHttp\Client();
+            $response = $client->request('post', $URL, [ 'headers' => $header, 'body' => $json ]);
+
+            $response = $response->getBody()->getContents();
+            
+
+            $response = json_decode($response);
+
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            
+        }
+
+        return $response;
+
+    }
+
+    public static function crear_cliente($cliente) {
+
+        try { date_default_timezone_set("America/Santiago"); } catch (\Throwable $th) { }
+
+        $response = false;
+
+        $resultado = null;
+
+        $token_ = self::get_value('token');
+
+        if ($token_ == null) {
+            self::get_info_usuario_api();
+            $token_ = self::get_value('token');
+        }
+
+
+        $header = [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'token' => $token_,
+        ];
+
+        $json = (object)[ 'Cliente' => $cliente,  ];
+        $json  = json_encode($json);
+        
+        try {
+            $URL = self::$endpoint.'api/createcliente';
+            $client = new \GuzzleHttp\Client();
+            $response = $client->request('post', $URL, [ 'headers' => $header, 'body' => $json ]);
+
+            $response = $response->getBody()->getContents();
+            
+
+            $response = json_decode($response);
+
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            
+        }
+
+        return $response;
+
+    }
+
+
 
     private static function store_value($value, $key) {
 
