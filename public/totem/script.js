@@ -62,7 +62,7 @@ const consulta_codigo = async (_codigo) => {
 
         qrcode = new QRCode(document.getElementById("qr-container-registro"), { width : 300, height : 300 });
 
-        qrcode.makeCode(_url);
+        qrcode.makeCode(`${_url}`);
         document.querySelector("#qr-container-registro img").style.display = 'initial'
         
         $("#QrRegistro").modal();
@@ -118,8 +118,8 @@ const set_focus_code = () =>{
 
 const set_focus_buscador_producto = () =>{
 
-    document.getElementById('txt_buscador_producto').value = ''
-    document.getElementById('txt_buscador_producto').focus()
+    // document.getElementById('txt_buscador_producto').value = ''
+    // document.getElementById('txt_buscador_producto').focus()
 
 }
 
