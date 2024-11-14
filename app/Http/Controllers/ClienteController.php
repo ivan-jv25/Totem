@@ -30,7 +30,7 @@ class ClienteController extends Controller
                 'Rut'         => $rut_cliente,
                 'Razonsocial' => $nombre,
                 'Giro'        => 'sin giro',
-                'Direccion'   => $direccion,
+                'Direccion'   => 'Sin Direccion',
                 'Ciudad'      => 'ciudad',
                 'Comuna'      => 'comuna',
                 'Telefono'    => $telefono,

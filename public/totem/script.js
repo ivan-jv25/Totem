@@ -15,6 +15,7 @@ Object.defineProperty(observador, 'valor', {
     }
 });
 
+
 window.onload=()=>{
 
     try { AndroidInterface.isGiftCard(JSON.stringify({ status : true })); } catch (error) { console.log(error) }
@@ -47,9 +48,10 @@ function handleKeyDown_producto(event) {
 
 const consulta_codigo = async (_codigo) => {
 
-    const existe = await existe_codigo(_codigo)
+    const existe = await existe_codigo(`${_codigo}`)
     
     if(existe.status){
+        iniciarInactividad();
         document.querySelector("body").removeEventListener("click", set_focus_code);
         // document.getElementById("input_code_cliente").removeEventListener("keydown", handleKeyDown);
 
@@ -58,12 +60,16 @@ const consulta_codigo = async (_codigo) => {
         open_doors()
     }else{
         let _url = new URL(URL_QR)
-        _url.searchParams.append('codigo', _codigo)
+        _url.searchParams.append('codigo', `${_codigo}`)
 
         qrcode = new QRCode(document.getElementById("qr-container-registro"), { width : 300, height : 300 });
 
         qrcode.makeCode(`${_url}`);
-        document.querySelector("#qr-container-registro img").style.display = 'initial'
+
+        setTimeout(function() {
+            document.querySelector("#qr-container-registro img").style.display = 'initial'
+            
+        }, 10); // Redirige después de 2 segundos
         
         $("#QrRegistro").modal();
     }
@@ -98,7 +104,7 @@ const existe_codigo = (_codigo) =>{
 
 const mensaje_bienvenida=(_nombre)=>{
 
-    const _mensaje = `¡Bienvenido! ${_nombre}`
+    const _mensaje = `${_nombre}`
     const utterance = new SpeechSynthesisUtterance(_mensaje)
 
     var voces = speechSynthesis.getVoices();
@@ -228,7 +234,7 @@ const lista_carro = ()=>{
                     <button type="button" class="btn btn-dark" hidden><i class="fa fa-minus"></i></button>
 
                     <div class="">
-                        <input type="text" class="form-control text-center" id="floatingInputGroup1" value="${element.cantidad}">
+                        <input type="text" class="form-control text-center" id="floatingInputGroup1" readonly value="${element.cantidad}">
                     </div>
 
                     <button type="button" class="btn btn-dark" hidden><i class="fa fa-plus"></i></button>
@@ -501,7 +507,7 @@ const generar_venta = () =>{
             /* Read more about handling dismissals below */
             if (result.dismiss === Swal.DismissReason.timer) {
                 console.log("I was closed by the timer");
-                // window.location.reload()
+                window.location.reload()
             }
         });
     })
@@ -512,6 +518,10 @@ const generar_venta = () =>{
 }
 
 const limpiar_carro = () => {
+
+    if(listado_producto.length == 0){
+        window.location.reload()
+    }
     
     listado_producto = []
 
@@ -528,3 +538,42 @@ const generar_venta_aux =() =>{
     try { AndroidInterface.imprimirDocumento(_data); } catch (error) { console.log(error) }
 
 }
+
+
+// Función para iniciar el contador de inactividad
+const  iniciarInactividad = (duracionInactividad = 5 * 60 * 1000) =>{
+    let temporizador;
+
+    // Función que se llama al detectar inactividad
+    const manejarInactividad = () => {
+        console.log("La página ha estado inactiva durante 5 minutos.");
+        // Aquí puedes añadir cualquier acción adicional
+        window.location.reload()
+        
+    };
+
+    // Función para reiniciar el temporizador
+    const reiniciarTemporizador = () => {
+        clearTimeout(temporizador);
+        temporizador = setTimeout(manejarInactividad, duracionInactividad);
+    };
+
+    // Escuchar eventos que indican actividad del usuario
+    const eventos = ['mousemove', 'keydown', 'scroll', 'click'];
+    eventos.forEach(evento => {
+        document.addEventListener(evento, reiniciarTemporizador);
+    });
+
+    // Iniciar el temporizador por primera vez
+    reiniciarTemporizador();
+    
+    // Devolver una función para detener el monitoreo
+    return () => {
+        clearTimeout(temporizador);
+        eventos.forEach(evento => {
+            document.removeEventListener(evento, reiniciarTemporizador);
+        });
+        console.log("Monitoreo de inactividad detenido.");
+    };
+}
+

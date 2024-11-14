@@ -24,7 +24,10 @@
 </head>
 <body>
 
-    <div class="container mt-5">
+    <div class="container mt-3">
+        
+        <img src="{{asset('totem/logo.jpg')}}" alt="Descripción de la imagen" class="d-block mx-auto" style="width: 120px;border-radius: 16px;">
+
         <h2 class="mb-4 text-center">Registro de Clientes</h2>
         <form id="registroForm">
             <!-- Campo RUT -->
@@ -56,11 +59,11 @@
             </div>
 
             <!-- Campo Dirección -->
-            <div class="mb-3">
+            <!-- <div class="mb-3">
                 <label for="direccion" class="form-label">Dirección</label>
                 <input type="text" class="form-control" id="direccion" placeholder="Dirección completa" required>
                 <div class="invalid-feedback">La dirección es obligatoria.</div>
-            </div>
+            </div> -->
 
             <!-- Botón de Enviar -->
             <div class="d-grid gap-2 mt-5">
@@ -94,7 +97,7 @@
             const nombre = document.getElementById('nombre');
             const telefono = document.getElementById('telefono');
             const correo = document.getElementById('correo');
-            const direccion = document.getElementById('direccion');
+            // const direccion = document.getElementById('direccion');
 
             // Validar RUT
             if (rut.value.trim()==='') {
@@ -131,12 +134,12 @@
             }
     
             // Validar Dirección (no vacía)
-            if (direccion.value.trim() === '') {
-                direccion.classList.add('is-invalid');
-                esValido = false;
-            } else {
-                direccion.classList.remove('is-invalid');
-            }
+            // if (direccion.value.trim() === '') {
+            //     direccion.classList.add('is-invalid');
+            //     esValido = false;
+            // } else {
+            //     direccion.classList.remove('is-invalid');
+            // }
 
             // Si todos los campos son válidos, enviar los datos
             if (esValido) {
@@ -145,7 +148,7 @@
                     nombre: nombre.value,
                     telefono: telefono.value,
                     correo: correo.value,
-                    direccion: direccion.value,
+                    // direccion: direccion.value,
                     codigo : CODIGO_REGISTRO
                 };
 
