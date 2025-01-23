@@ -39,7 +39,7 @@ class ApiController extends Controller
 
             $token_    = $resultado[0]->Token;
             $id_bodega = $resultado[0]->id_bodega;
-            
+
             self::store_value($token_, 'token');
             self::store_value($id_bodega, 'id_bodega');
 
@@ -87,18 +87,18 @@ class ApiController extends Controller
             $token->save();
 
 
-            return [ 'status'=>true ]; 
+            return [ 'status'=>true ];
 
         } catch (\Throwable $th) { dd($th); }
 
-        return [ 'status'=>false ]; 
+        return [ 'status'=>false ];
     }
 
     public static function get_familia_api() {
 
         $resultado = [];
         $token = self::get_value('token');
-        
+
         if ($token == null) {
             self::get_info_usuario_api();
             $token = self::get_value($key);
@@ -131,9 +131,9 @@ class ApiController extends Controller
             $token_ = self::get_value($key);
         }
 
-        
 
-        
+
+
 
         $header = [ 'token' => $token_, ];
 
@@ -147,10 +147,10 @@ class ApiController extends Controller
             $resultado = $response->getBody()->getContents();
             $resultado = json_decode($resultado);
 
-        
+
         } catch (\Throwable $th) {
             //throw $th;
-            
+
         }
         return $resultado;
 
@@ -301,7 +301,7 @@ class ApiController extends Controller
         $id_bodega = (int)$request->id_bodega;
 
         $token_ = self::get_token_by_bodega($id_bodega);
-        
+
 
         if ($token_ == null) {
             self::get_info_usuario_api();
@@ -309,7 +309,7 @@ class ApiController extends Controller
         }
 
         // dd($token_);
-        
+
         $cliente = $request->cliente;
         $detalle_compra = $request->detalle;
         $montos = $request->montos;
@@ -344,9 +344,10 @@ class ApiController extends Controller
             "IVA" => $montos['iva'],
             "NetoExento" => 0,
             "NetoAfecto" => $montos['neto'],
-            "Descuento" => 0
+            "Descuento" => 0,
+            "Porcentaje" => $cliente['porcentaje'],
         ];
-        
+
         $detalle = [];
 
         $count = 1;
@@ -376,7 +377,7 @@ class ApiController extends Controller
 
         $json = (object)[ 'Encabezado' => $encabezado, 'Detalle' => $detalle, 'Pago' => $pago ];
         $json  = json_encode($json);
-        
+
         try {
             $URL = self::$endpoint.'api/venta';
             $client = new \GuzzleHttp\Client();
@@ -403,7 +404,7 @@ class ApiController extends Controller
 
         $resultado = false;
 
-        
+
         $token_ = self::get_value('token');
 
         if ($token_ == null) {
@@ -411,9 +412,9 @@ class ApiController extends Controller
             $token_ = self::get_value('token');
         }
 
-        
+
         $tipo = "barra";
-        
+
         $header = [
             'token' => $token_,
             'codigo' => $codigo,
@@ -429,7 +430,7 @@ class ApiController extends Controller
             $response = $client->request('get',$URL, [ 'headers' => $header ]);
 
             if($response->getStatusCode() == 200){ $resultado = json_decode($response->getBody()->getContents(),TRUE); }
-            
+
         } catch (\Throwable $th) { }
 
         return $resultado;
@@ -440,7 +441,7 @@ class ApiController extends Controller
         $resultado = false;
 
         //tiene que cambiar a token la key
-        
+
         $token_ = self::get_value('token');
 
         if ($token_ == null) {
@@ -465,7 +466,7 @@ class ApiController extends Controller
             $resultado = $response->getBody()->getContents();
             $resultado = json_decode($resultado);
 
-            
+
 
             $resultado = $resultado->token;
             // $key = 'giftcard';
@@ -508,7 +509,7 @@ class ApiController extends Controller
             $resultado = $response->getBody()->getContents();
 
             $resultado = json_decode($resultado);
-            
+
 
         } catch (\Throwable $th) {
             $resultado = null;
@@ -545,7 +546,7 @@ class ApiController extends Controller
             //throw $th;
         }
 
-        return $resultado;        
+        return $resultado;
     }
 
     public static function generar_giftcard(string $rut_cliente, string $codigo) {
@@ -572,21 +573,21 @@ class ApiController extends Controller
 
         $json = (object)[ 'rut_cliente' => $rut_cliente, 'codigo' => $codigo ];
         $json  = json_encode($json);
-        
+
         try {
             $URL = self::$endpoint.'api/giftcard/generar';
             $client = new \GuzzleHttp\Client();
             $response = $client->request('post', $URL, [ 'headers' => $header, 'body' => $json ]);
 
             $response = $response->getBody()->getContents();
-            
+
 
             $response = json_decode($response);
 
 
         } catch (\Throwable $th) {
             //throw $th;
-            
+
         }
 
         return $response;
@@ -617,21 +618,21 @@ class ApiController extends Controller
 
         $json = (object)[ 'Cliente' => $cliente,  ];
         $json  = json_encode($json);
-        
+
         try {
             $URL = self::$endpoint.'api/createcliente';
             $client = new \GuzzleHttp\Client();
             $response = $client->request('post', $URL, [ 'headers' => $header, 'body' => $json ]);
 
             $response = $response->getBody()->getContents();
-            
+
 
             $response = json_decode($response);
 
 
         } catch (\Throwable $th) {
             //throw $th;
-            
+
         }
 
         return $response;
