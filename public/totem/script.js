@@ -49,7 +49,7 @@ function handleKeyDown_producto(event) {
 const consulta_codigo = async (_codigo) => {
 
     const existe = await existe_codigo(`${_codigo}`)
-    
+
     if(existe.status){
         iniciarInactividad();
         document.querySelector("body").removeEventListener("click", set_focus_code);
@@ -68,9 +68,9 @@ const consulta_codigo = async (_codigo) => {
 
         setTimeout(function() {
             document.querySelector("#qr-container-registro img").style.display = 'initial'
-            
+
         }, 10); // Redirige después de 2 segundos
-        
+
         $("#QrRegistro").modal();
     }
 
@@ -408,16 +408,23 @@ const generar_qr_pago = (_URL_QR) =>{
 
 const generar_venta = () =>{
 
+    let descuento = cliente.porcentaje || 0;
 
     let total = listado_producto.reduce((detalle, actual) =>{ return detalle = detalle + actual.total },0);
-    let neto = parseInt(total /1.19)
+
+    let monto_descuento = total * (descuento / 100);
+    let total_con_descuentos = total - monto_descuento;
+
+    let neto = parseInt(total_con_descuentos /1.19)
     let iva = neto * 0.19
 
     const montos = {
         total : total,
         neto : neto,
-        iva : iva
-    }
+        iva : iva,
+        monto_descuento : monto_descuento,
+        total_con_descuentos: total_con_descuentos
+    };
 
 
     let obj = {
@@ -522,7 +529,7 @@ const limpiar_carro = () => {
     if(listado_producto.length == 0){
         window.location.reload()
     }
-    
+
     listado_producto = []
 
     lista_carro()
@@ -549,7 +556,7 @@ const  iniciarInactividad = (duracionInactividad = 5 * 60 * 1000) =>{
         console.log("La página ha estado inactiva durante 5 minutos.");
         // Aquí puedes añadir cualquier acción adicional
         window.location.reload()
-        
+
     };
 
     // Función para reiniciar el temporizador
@@ -566,7 +573,7 @@ const  iniciarInactividad = (duracionInactividad = 5 * 60 * 1000) =>{
 
     // Iniciar el temporizador por primera vez
     reiniciarTemporizador();
-    
+
     // Devolver una función para detener el monitoreo
     return () => {
         clearTimeout(temporizador);

@@ -138,7 +138,7 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content ">
                 <div class="modal-header">
-                    <h5 class="modal-title w-100 text-center" id="paymentModalLabel">Registro de Clientes</h5>    
+                    <h5 class="modal-title w-100 text-center" id="paymentModalLabel">Registro de Clientes</h5>
                 </div>
                 <div class="modal-body payment-container">
                     <div id="qr-container-registro" class="mx-5"></div>
@@ -152,8 +152,8 @@
                     <button onclick="location.reload()" class="btn btn-lg  btn-primary">Ya te registraste?</button>
                   </div>
                 </div>
-                  
-                
+
+
             </div>
         </div>
     </div>
@@ -178,7 +178,7 @@
     </script>
 
     <script src="{{asset('QR/qrcode.js')}}"></script>
-    <script src="{{asset('totem/script.js?ver=1.1.6.6')}}"></script>
+    <script src="{{asset('totem/script.js?ver=1.1.6.7')}}"></script>
 
   </body>
 

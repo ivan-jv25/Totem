@@ -340,12 +340,11 @@ class ApiController extends Controller
             "Anio" => $anio,
             "FechaVencimiento" => $fecha_vencimiento,
             "Propina" => 0,
-            "Total" => $montos['total'],
+            "Total" => $montos['total_con_descuentos'],
             "IVA" => $montos['iva'],
             "NetoExento" => 0,
             "NetoAfecto" => $montos['neto'],
-            "Descuento" => 0,
-            "Porcentaje" => $cliente['porcentaje'],
+            "Descuento" => $montos['monto_descuento']
         ];
 
         $detalle = [];
