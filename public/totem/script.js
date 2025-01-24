@@ -210,11 +210,21 @@ const lista_carro = ()=>{
 
     let _lista = ``
     let count = 0
+
+    let descuento = 0;
+    let total_listado_producto = 0
+
+    listado_producto.forEach(element => { total_listado_producto += element.precio_venta * element.cantidad; });
+    if (total_listado_producto >= 2000) { descuento = cliente.porcentaje || 0; }
+
     listado_producto.forEach(element => {
         count++
         element.total = element.precio_venta * element.cantidad
 
-        const _total = element.total.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
+        let cantidad_descuento = element.total * (descuento / 100);
+        let total_descuento = element.total - cantidad_descuento;
+
+        const _total = total_descuento.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
 
 
         _lista += `
@@ -246,10 +256,13 @@ const lista_carro = ()=>{
 
     `});
 
-    const total = listado_producto.reduce((detalle, actual) =>{ return detalle = detalle + actual.total },0).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
+    const total = listado_producto.reduce((detalle, actual) =>{ return detalle = detalle + actual.total },0);
+
+    let monto_descuento = total * (descuento / 100);
+    let total_con_descuentos = total - monto_descuento;
 
     document.getElementById('tbody_carro').innerHTML = _lista
-    document.getElementById('sp_total').innerHTML = `${total}.-`
+    document.getElementById('sp_total').innerHTML = `${total_con_descuentos.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}.-`
 }
 
 const seleccion_pago = () => {
@@ -408,15 +421,17 @@ const generar_qr_pago = (_URL_QR) =>{
 
 const generar_venta = () =>{
 
-    let descuento = cliente.porcentaje || 0;
+    let descuento = 0;
 
     let total = listado_producto.reduce((detalle, actual) =>{ return detalle = detalle + actual.total },0);
+
+    if (total >= 2000) { descuento = cliente.porcentaje || 0; }
 
     let monto_descuento = total * (descuento / 100);
     let total_con_descuentos = total - monto_descuento;
 
     let neto = parseInt(total_con_descuentos /1.19)
-    let iva = neto * 0.19
+    let iva = total_con_descuentos - neto
 
     const montos = {
         total : total,
