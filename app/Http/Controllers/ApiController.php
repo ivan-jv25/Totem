@@ -12,7 +12,7 @@ class ApiController extends Controller
 {
 
     public static $endpoint = 'http://onedte.cl/';
-    // public static $endpoint = 'http://192.168.1.101/';
+    // public static $endpoint = 'http://192.168.100.5/';
 
     public static function get_info_usuario_api() {
 
@@ -333,7 +333,7 @@ class ApiController extends Controller
             "Documento" => 39,
             "Estado" => 1,
             "Observacion" => "",
-            "formapago" => 1,
+            "formapago" => 382,
             "Bodega" => $id_bodega,
             "Dia" => $dia,
             "Mes" => $mes,
