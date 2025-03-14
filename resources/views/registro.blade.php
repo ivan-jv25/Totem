@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <title>Totem</title>
-    
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,7 +14,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
+
     <link href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css " rel="stylesheet">
     <script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js "></script>
 
@@ -25,7 +25,7 @@
 <body>
 
     <div class="container mt-3">
-        
+
         <img src="{{asset('totem/logo.jpg')}}" alt="Descripción de la imagen" class="d-block mx-auto" style="width: 120px;border-radius: 16px;">
 
         <h2 class="mb-4 text-center">Registro de Clientes</h2>
@@ -33,7 +33,7 @@
             <!-- Campo RUT -->
             <div class="mb-3">
                 <label for="rut" class="form-label">RUT</label>
-                <input type="text" class="form-control" id="rut" placeholder="12.345.678-9" required>
+                <input type="text" class="form-control" id="rut" placeholder="12.345.678-9" required onkeyup="formato_rut(this)">
                 <div class="invalid-feedback">Ingrese un RUT válido.</div>
             </div>
 
@@ -71,9 +71,9 @@
             </div>
 
         </form>
-        
+
     </div>
-  
+
 
     <script>
         const URL_STORE = "{{route('registro.cliente.store')}}"
@@ -85,6 +85,64 @@
             const rutRegex = /^\d{1,2}\.\d{3}\.\d{3}-[\dkK]$/;
             return rutRegex.test(rut);
         }
+
+        const formato_rut = (input) =>{
+
+            let rut = input.value
+
+            res = true;
+            let n = 0;
+            let n2 = 0;
+            let n3 = 0;
+            let n4 = 0;
+            while(res){
+                if (n!=-1){rut = rut.replace(".", "");}
+                if (n2 !=-1) {rut = rut.replace(" ", "");}
+                if (n3 != -1) {rut = rut.replace("-", "");}
+                if (n4 != -1) {rut = rut.replace(",", "");}
+                n = rut.indexOf(".");
+                n2 = rut.indexOf(" ");
+                n3 = rut.indexOf("-");
+                n4 = rut.indexOf(",");
+
+                if (n == -1 && n2 == -1 && n3 == -1 && n4 == -1){
+                    res     = false;
+                    largo   = rut.length;
+                    dv      = rut.substr(largo-1, 1);
+                    aux_rut = rut.substring(0, largo-1);
+                    rut     = aux_rut+"-"+dv;
+                }
+            };
+
+            input.value = rut
+
+        }
+
+        const validarRut_verificador = (rut) => {
+
+            rut = rut.replace(/[^0-9kK]/g, '');
+
+            if (rut.length < 2) {
+                return false;
+            }
+
+            const dv = rut.slice(-1).toUpperCase();
+            const rutNumerico = rut.slice(0, -1);
+
+            let suma = 0;
+            let multiplicador = 2;
+
+            for (let i = rutNumerico.length - 1; i >= 0; i--) {
+                suma += parseInt(rutNumerico[i]) * multiplicador;
+                multiplicador = multiplicador < 7 ? multiplicador + 1 : 2;
+            }
+
+            const mod11 = 11 - (suma % 11);
+            const dvEsperado = mod11 === 11 ? '0' : mod11 === 10 ? 'K' : mod11.toString();
+
+            return dv === dvEsperado;
+
+        };
 
         // Validación y envío del formulario
         document.getElementById('registroForm').addEventListener('submit', function (event) {
@@ -106,7 +164,14 @@
             } else {
                 rut.classList.remove('is-invalid');
             }
-    
+
+            if (!validarRut_verificador(rut.value.trim())) {
+                rut.classList.add('is-invalid');
+                esValido = false;
+            } else {
+                rut.classList.remove('is-invalid');
+            }
+
             // Validar Nombre (no vacío)
             if (nombre.value.trim() === '') {
                 nombre.classList.add('is-invalid');
@@ -123,7 +188,7 @@
             } else {
                 telefono.classList.remove('is-invalid');
             }
-    
+
             // Validar Correo
             const correoRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
             if (!correoRegex.test(correo.value)) {
@@ -132,7 +197,7 @@
             } else {
                 correo.classList.remove('is-invalid');
             }
-    
+
             // Validar Dirección (no vacía)
             // if (direccion.value.trim() === '') {
             //     direccion.classList.add('is-invalid');
@@ -158,7 +223,7 @@
             }
         });
 
-            
+
         const store_clinete = (_datos)=>{
 
             fetch(URL_STORE, {
@@ -183,7 +248,7 @@
             })
         }
 
-        
+
     </script>
 </body>
 </html>
