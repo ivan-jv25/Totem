@@ -81,7 +81,9 @@ const existe_codigo = (_codigo) =>{
 
     return new Promise((resolve, reject)=>{
 
-        const obj = { _token:TOKEN_SESSION, codigo: _codigo, }
+        let codigoLimpio = _codigo.replace(/\u0000/g, '').trim();
+
+        const obj = { _token:TOKEN_SESSION, codigo: codigoLimpio, }
         const options = { method: "POST", headers: { "Content-Type": "application/json" } , body:JSON.stringify(obj)};
 
         fetch(URL_CONSULTA_CLIENTE, options)

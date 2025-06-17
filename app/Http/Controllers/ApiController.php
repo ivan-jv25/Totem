@@ -656,7 +656,7 @@ class ApiController extends Controller
         return $configuracion == null ? null : $configuracion->token;
     }
 
-    private function get_token_by_bodega(int $id_bodega){
+    private static function get_token_by_bodega(int $id_bodega){
 
         $where = [ ['id_bodega', $id_bodega] ];
         $configuracion = DB::table('bodega_token')->select('token')->where($where)->first();

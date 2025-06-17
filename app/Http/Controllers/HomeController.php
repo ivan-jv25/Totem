@@ -15,6 +15,8 @@ use App\Models\DatoVenta;
 use Validator;
 use DB;
 
+use Illuminate\Support\Facades\Log;
+
 class HomeController extends Controller
 {
     /**
@@ -34,14 +36,14 @@ class HomeController extends Controller
      */
     public function index(){
         $bodegas = Bodega::select('id_bodega', 'nombre')->get();
-        
+
 
         return view('home')->with('bodegas',$bodegas);
     }
 
     public function go_to_tienda(Request $request){
 
-        
+
 
         $id_bodega = $request->tienda;
 
@@ -68,13 +70,13 @@ class HomeController extends Controller
 
     public function probar_api_info_usuario() {
         $usuario = \App\Http\Controllers\ApiController::get_info_usuario_api();
-        
+
         return $usuario;
     }
 
     public function probar_api_familia() {
         $familia = \App\Http\Controllers\ApiController::get_familia_api();
-        
+
         return $familia;
     }
 
@@ -120,20 +122,23 @@ class HomeController extends Controller
         $prod_especifico = \App\Http\Controllers\ApiController::get_producto_especifico_api($codigo_barra, $id_bodega);
 
         $respuesta = count($prod_especifico) == 0 ? false : true;
-        
+
         return new JsonResponse([ 'status'=>$respuesta, 'producto' => $prod_especifico ], 200);
     }
 
     public function probar_api_giftcard_codigobarra(Request $request) {
         $codigo = (string)$request->codigo;
-        $giftcard_codigobarra = \App\Http\Controllers\ApiController::get_giftcard_codigobarra_api($codigo);
+
+        $codigo_limpio = self::procesarCodigo($codigo);
+        $giftcard_codigobarra = \App\Http\Controllers\ApiController::get_giftcard_codigobarra_api($codigo_limpio);
 
         if($giftcard_codigobarra == null){
             return [ 'status'=>false ];
         }
-        
+
 
         $giftcard_datos = \App\Http\Controllers\ApiController::get_datos_giftcard($giftcard_codigobarra);
+        Log::info("Codigo de barra no existe");
 
         if($giftcard_codigobarra == null){
             return [ 'status'=>false ];
@@ -143,7 +148,33 @@ class HomeController extends Controller
             'status'=>true,
             'data'=>$giftcard_datos
         ];
-        
+
+    }
+
+    public function procesarCodigo($codigo) {
+        try {
+            // Log original input
+            Log::info('Código original recibido', ['codigo' => $codigo]);
+
+            // Clean the code by removing null bytes and trimming
+            $codigoLimpio = trim(str_replace('\u0000', '', $codigo));
+
+            Log::info('Código procesado', [
+                'codigo_original' => $codigo,
+                'codigo_limpio' => $codigoLimpio,
+                'longitud_original' => strlen($codigo),
+                'longitud_limpia' => strlen($codigoLimpio)
+            ]);
+
+            return $codigoLimpio;
+
+        } catch (\Exception $e) {
+            Log::error('Error al procesar código', [
+                'codigo' => $codigo,
+                'error' => $e->getMessage()
+            ]);
+            throw $e;
+        }
     }
 
     public function probar_api_giftcard_datos() {
@@ -155,9 +186,9 @@ class HomeController extends Controller
 
     public function store_familia() {
 
-        
+
         $familia = \App\Http\Controllers\ApiController::get_familia_api();
-        
+
 
         foreach ($familia as $key => $value) {
 
@@ -179,7 +210,7 @@ class HomeController extends Controller
             } else {
 
                 $familia = Familia::where('id_familia',$id_familia)->first();
-                
+
                 $familia->nombre     = $nombre;
                 $familia->estado     = $estado;
                 $respuesta = $familia->save();
@@ -194,7 +225,7 @@ class HomeController extends Controller
 
     public function store_sub_familia() {
 
-        
+
         $sub_familia = \App\Http\Controllers\ApiController::get_sub_familia_api();
 
         foreach ($sub_familia as $key => $value) {
@@ -225,10 +256,10 @@ class HomeController extends Controller
 
     public function store_bodega() {
 
-        
+
         $bodega = \App\Http\Controllers\ApiController::get_bodega_api();
 
-        
+
 
         foreach ($bodega as $key => $value) {
 
@@ -258,14 +289,14 @@ class HomeController extends Controller
 
         foreach ($forma_pago as $key => $value) {
 
-            
+
 
             $id_forma_pago = $value->id;
             $nombre = $value->nombre;
             $sii = $value->sii;
             $estado = $value->estado;
             $efectivo = $value->efectivo == null ? 0 : 1;
-            
+
 
             $existe = self::forma_pago_existe($id_forma_pago);
             if (!$existe) {
@@ -405,5 +436,5 @@ class HomeController extends Controller
         return $producto == null ? false : true;
 
     }
-    
+
 }
