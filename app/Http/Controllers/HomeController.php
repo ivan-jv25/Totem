@@ -119,6 +119,8 @@ class HomeController extends Controller
         $codigo_barra = (string)$request->codigo_barra;
         $id_bodega = (int)$request->id_bodega;
 
+        $codigo_barra = self::procesarCodigo($codigo_barra);
+
         $prod_especifico = \App\Http\Controllers\ApiController::get_producto_especifico_api($codigo_barra, $id_bodega);
 
         $respuesta = count($prod_especifico) == 0 ? false : true;

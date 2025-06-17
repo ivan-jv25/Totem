@@ -48,6 +48,17 @@ function handleKeyDown_producto(event) {
 
 const consulta_codigo = async (_codigo) => {
 
+
+    let limite = 100;
+    let recorrido = 0;
+
+    while (/[\x00-\x1F\x7F]/.test(_codigo) && recorrido < limite) {
+        _codigo = _codigo.replace(/[\x00-\x1F\x7F]/g, '').trim();
+        recorrido++;
+    }
+
+    // swal.fire({ title: "debug", text: `recorrido: ${recorrido} - codigo: ${codigo_aux}` });
+
     const existe = await existe_codigo(`${_codigo}`)
 
     if(existe.status){
@@ -81,9 +92,9 @@ const existe_codigo = (_codigo) =>{
 
     return new Promise((resolve, reject)=>{
 
-        let codigoLimpio = _codigo.replace(/\u0000/g, '').trim();
 
-        const obj = { _token:TOKEN_SESSION, codigo: codigoLimpio, }
+
+        const obj = { _token:TOKEN_SESSION, codigo: _codigo, }
         const options = { method: "POST", headers: { "Content-Type": "application/json" } , body:JSON.stringify(obj)};
 
         fetch(URL_CONSULTA_CLIENTE, options)
@@ -155,6 +166,14 @@ const open_doors = ()=>{
 
 
 const buscar_producto = (_codigo) =>{
+
+    let limite = 100;
+    let recorrido = 0;
+
+    while (/[\x00-\x1F\x7F]/.test(_codigo) && recorrido < limite) {
+        _codigo = _codigo.replace(/[\x00-\x1F\x7F]/g, '').trim();
+        recorrido++;
+    }
 
     const obj = {
         _token:TOKEN_SESSION,
