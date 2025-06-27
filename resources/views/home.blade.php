@@ -51,7 +51,7 @@
 
 <script>
     const TOKEN_SESSION = '{{csrf_token()}}';
-    const URL_TOKEN_BODEGA = "{{route('api.token.bodega')}}"
+    
 </script>
 
 @endsection

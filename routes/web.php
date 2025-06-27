@@ -27,5 +27,15 @@ Route::get('/optimize-clear', function () {
 Route::group(['middleware' => 'auth'], function () {
     
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+    // Colores
+    Route::get('/colores', [App\Http\Controllers\ColoresController::class, 'index'])->name('colores.index');
+    Route::post('/colores/actualizar', [App\Http\Controllers\ColoresController::class, 'update'])->name('colores.update');
+
+    // Imagenes
+    Route::get('/imagenes', [App\Http\Controllers\ImagenesController::class, 'index'])->name('imagenes.index');
+    Route::post('/imagenes/logo', [App\Http\Controllers\ImagenesController::class, 'subir_logo'])->name('imagenes.logo');
+    Route::post('/imagenes/lista', [App\Http\Controllers\ImagenesController::class, 'subir_lista'])->name('imagenes.lista');
    
 });

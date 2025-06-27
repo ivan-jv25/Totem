@@ -33,11 +33,7 @@ class HomeController extends Controller
         
 
 
-        return view('home')->with('bodegas',$bodegas);
+        return view('home');
     }
-
     
-
-
-
 }

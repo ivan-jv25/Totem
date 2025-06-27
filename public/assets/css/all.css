@@ -1,0 +1,32 @@
+ body {
+     background : #f4f8fb;
+     font-family: 'Nunito', sans-serif;
+     margin     : 0;
+     padding    : 0;
+ }
+
+
+ footer {
+     background    : linear-gradient(90deg, #00b894 0%, #0984e3 100%);
+     color         : #fff;
+     text-align    : center;
+     padding       : 24px 0 12px 0;
+     font-size     : 1rem;
+     letter-spacing: 1px;
+     margin-top    : 40px;
+ }
+
+ .footer-links a {
+     color          : #fff;
+     margin         : 0 10px;
+     text-decoration: underline;
+     font-weight    : 500;
+ }
+
+ .footer-links a:hover {
+     color: #dff9fb;
+ }
+
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+  color: #0984e3 !important;
+}
