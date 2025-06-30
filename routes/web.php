@@ -36,6 +36,9 @@ Route::group(['middleware' => 'auth'], function () {
     // Imagenes
     Route::get('/imagenes', [App\Http\Controllers\ImagenesController::class, 'index'])->name('imagenes.index');
     Route::post('/imagenes/logo', [App\Http\Controllers\ImagenesController::class, 'subir_logo'])->name('imagenes.logo');
-    Route::post('/imagenes/lista', [App\Http\Controllers\ImagenesController::class, 'subir_lista'])->name('imagenes.lista');
+
+    Route::post('/imagenes/banner', [App\Http\Controllers\ImagenesController::class, 'subir_banner'])->name('imagenes.banner');
+    Route::get('/imagenes/lista', [App\Http\Controllers\ImagenesController::class, 'lista_banner'])->name('imagenes.lista');
+    Route::get('/imagenes/eliminar', [App\Http\Controllers\ImagenesController::class, 'eliminar_banner'])->name('imagenes.eliminar');
    
 });
