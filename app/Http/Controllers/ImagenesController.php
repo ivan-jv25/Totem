@@ -19,10 +19,28 @@ class ImagenesController extends Controller
         
         $archivo = $request->file('logo');
         $extension = $archivo->getClientOriginalExtension(); // Obtiene la extensión original
-        $filename = 'logo.' . $extension;
+        $filename = 'logo_redondo.' . $extension;
 
         $archivoController = new ArchivosController();
         $ruta = $archivoController->modificar_archivo($archivo, $filename, 'img/logo');
+        
+        return back()->with('success', 'Logo subido correctamente.');
+    }
+
+    public function subir_logo_principal(Request $request){
+        // Validar que se haya subido un archivo
+        $request->validate([
+            'logo_principal' => 'required|image|max:2048'
+        ]);
+        
+        $archivo = $request->file('logo_principal');
+        $extension = $archivo->getClientOriginalExtension(); // Obtiene la extensión original
+        $filename = 'logo_principal.' . $extension;
+
+        $archivoController = new ArchivosController();
+        $ruta = $archivoController->modificar_archivo($archivo, $filename, 'img/logo');
+
+        
         
         return back()->with('success', 'Logo subido correctamente.');
     }

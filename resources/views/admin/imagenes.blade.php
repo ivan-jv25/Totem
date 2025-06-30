@@ -8,9 +8,46 @@
 
         <!-- Card para subir logo -->
         <div class="col-12 col-md-5 mb-4">
+            <div class="card shadow mb-3">
+
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Subir Logo Principal</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Nuevo logo seleccionado -->
+                   
+
+                    <div class="mb-3 text-center ">
+                        <label class="form-label">Banner seleccionado:</label><br>
+                        <div id="logo_preview_container" class="my-3" style="width: 500px; height: 200px; margin: 0 auto; overflow: hidden; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 0.25rem;">
+                            <img src="{{ asset('assets/img/logo/logo_principal.png') }}" onerror="this.onerror=null;this.src=`{{ asset('/assets/img/sinimagen.png') }}`;">
+                        </div>
+                        <div class="mt-2 text-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary" id="logo_crop_btn">Recortar</button>
+                                <button type="button" class="btn btn-secondary" id="logo_cancel_btn">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form action="{{ route('imagenes.logo.principal') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="imagenes" class="form-label">Selecciona una o más imágenes</label>
+                            <input type="file" class="form-control" id="input_file_logo_principal" name="logo_principal" accept="image/*" multiple required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Subir Imágenes</button>
+                    </form>
+                </div>
+
+              
+            </div>
+
+
+
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Subir Logo</h5>
+                    <h5 class="mb-0">Subir Logo Redondo</h5>
                 </div>
                 <div class="card-body">
 
@@ -19,7 +56,7 @@
                         <!-- Logo actual -->
                         <div class="mb-3 text-center flex-fill">
                             <label class="form-label">Logo actual:</label><br>
-                            <img id="logo-actual" src="{{ asset('assets/img/logo/logo.png') }}" alt="Logo actual" style="max-width: 180px; max-height: 120px; border:1px solid #ccc; border-radius:8px;">
+                            <img id="logo-actual" src="{{ asset('assets/img/logo/logo_redondo.png') }}" alt="Logo actual" style="max-width: 180px; max-height: 120px; border:1px solid #ccc; border-radius:8px;">
                         </div>
                    
                         <!-- Nuevo logo seleccionado -->
@@ -45,6 +82,9 @@
                     </form>
                 </div>
             </div>
+
+
+
         </div>
 
 
@@ -113,6 +153,7 @@
     const URL_ELIMINAR_BANNER = "{{route('imagenes.eliminar')}}"
 
     window.onload= async()=>{
+        _init_cropper_logo_principal()
         _init_cropper_logo()
         _init_cropper_banner()
 
@@ -129,6 +170,28 @@
             cropButtonId: 'popup_crop_btn',
             cancelButtonId: 'popup_cancel_btn',
             width: 200,
+            height: 200,
+            onCropSuccess: (croppedFile, input_file) => { 
+    
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(croppedFile);
+                // Asignar el archivo recortado al input file
+                input_file.files = dataTransfer.files;
+            },
+            modalId : null
+        });
+            
+        window.currentPopupCropper = popupCropper;
+    };
+
+    const _init_cropper_logo_principal = () => {
+
+        const popupCropper = initImageCropper({
+            inputFileId: 'input_file_logo_principal',
+            previewContainerId: 'logo_preview_container',
+            cropButtonId: 'logo_crop_btn',
+            cancelButtonId: 'logo_cancel_btn',
+            width: 540,
             height: 200,
             onCropSuccess: (croppedFile, input_file) => { 
     
