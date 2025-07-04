@@ -19,7 +19,7 @@
 
     
     <link rel="stylesheet" href="{{ asset('assets/css/variables.css') }}">
-    <link rel="stylesheet" href="{{ asset('totem/assets/css/styles_inicio.css') }}">
+    <link rel="stylesheet" href="{{ asset('totem/assets/css/styles_inicio.css?ver=1.2') }}">
     
 
   </head>
@@ -121,9 +121,20 @@
         </button>
 
         <!-- Botón 2: Carro con precio -->
-        <button class="btn btn-outline-light  fw-bold fs-1" onclick="openNav()">
-          <i class="fas fa-shopping-cart"></i> $18.300
+        <button class="btn btn-outline-light fw-bold fs-1" onclick="open_carro()">
+          <span class="d-flex justify-content-between align-items-center w-100">
+            <span class="position-relative" style="width:50px; height:50px;">
+              
+
+              <img src="{{asset('totem/assets/imagenes/carro3.png')}}" id="icono_carro" style="position:absolute; left:0; top:0; width:50px; height:50px; font-size:50px; transition:opacity 0.5s;">
+
+              <img src="{{asset('totem/assets/imagenes/carro2.gif')}}" id="gif_carro" class="oculto" style="position:absolute; left:0; top:0; width:50px; height:50px; transition:opacity 0.5s;">
+
+            </span>
+            <span id="sp_total_a_pagar">$0</span>
+          </span>
         </button>
+         
 
         <!-- Botón 3: Continuar -->
         <button class="btn btn-continuar fw-bold fs-1" onclick="confirma_pago()">
@@ -133,14 +144,27 @@
       </div>
     </div>
 
+    <div class="toast-container position-fixed start-50 translate-middle p-3 w-100">
+      <div id="liveToast" class="toast w-100 mw-100 text-white bg-dark border-1 border-white ">
+        <div class="d-flex align-items-center justify-content-center w-100">
+          <!-- <span class="fs-1 mx-3" style="color: #FDD835;"><i class="fa-regular fa-thumbs-up"></i></span> -->
+          <span class="fs-1 mx-3" ><img src="{{asset('totem\assets\imagenes\dedo.gif')}}" style="transform: rotate(180deg);width: 15%;" alt="" srcset=""></span>
+          <div class="toast-body w-100 text-start p-0 m-0" style="font-size:1.5rem;">
+            ¡Operación exitosa!
+          </div>
+          <button type="button" class="btn-close btn-close-white mx-3" data-bs-dismiss="toast"></button>
+        </div>
+      </div>
+    </div>
+    
 
 
 
     <div id="my_carrito_compra" class="carrito-compra">
-      <a  class="closebtn" onclick="closeNav()">&times;</a>
+      <a  class="closebtn" onclick="close_carro()">&times;</a>
 
       <div class="container detalle py-2" id="detalle_carrito_modal2">
-        <div class="row g-2" id="detalle_carrito_modal">
+        <div  id="detalle_carrito_modal">
   
           <!-- <div class="col-12 detalle-carrito">
             <div class="card shadow-sm">
@@ -175,22 +199,22 @@
 
           <div class="d-flex justify-content-between py-2 border-bottom" >
             <span><strong>Cantidad Prodcutos:</strong></span>
-            <span>21</span>
+            <span id="sp_cantidad_productos">21</span>
           </div>
 
           <div class="d-flex justify-content-between py-2 border-bottom" >
             <span><strong>Neto:</strong></span>
-            <span>$15.378</span>
+            <span id="sp_neto_compra">$15.378</span>
           </div>
 
           <div class="d-flex justify-content-between py-2 border-bottom" >
             <span><strong>IVA (19%):</strong></span>
-            <span>$2.922</span>
+            <span id="sp_iva_compra">$2.922</span>
           </div>
 
           <div class="d-flex justify-content-between py-2 mb-3 border-bottom" >
             <span><strong>Total:</strong></span>
-            <span>$18.300</span>
+            <span id="sp_total_compra">$18.300</span>
           </div>
 
           <hr style="border-top: 3px dashed #000000;">
@@ -204,18 +228,22 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="{{ asset('totem/assets/js/shop.js') }}"></script>
-    <script src="{{ asset('totem/assets/js/producto.js') }}"></script>
+    <script src="{{ asset('totem/assets/js/shop.js?ver=1.2') }}"></script>
+    <script src="{{ asset('totem/assets/js/producto.js?ver=1.5') }}"></script>
  
     <script>
       
       const ID_BODEGA = "{{$id_bodega}}"
       const URL_LISTA_PRODUCTOS = "{{route('lista.productos')}}"
+      const URL_INICIO = "{{ route('totem.index') }}";
 
       window.onload=()=>{
         
          buscar_productos()
       }
+      
+
+
 
       
     </script>

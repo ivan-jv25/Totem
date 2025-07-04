@@ -1,13 +1,9 @@
-function openNav() {
-    document.getElementById("my_carrito_compra").style.width = "500px";
-}
 
-function closeNav() {
-    document.getElementById("my_carrito_compra").style.width = "0";
-}
+
+
 
 const volver_inicio = () => {
-    const URL_INICIO = "{{ route('totem.index') }}";
+    
     let _url = new URL(URL_INICIO);
     _url.searchParams.append("tienda", ID_BODEGA);
     window.location.href = _url; // Cambia por tu destino real

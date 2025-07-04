@@ -185,13 +185,14 @@ body {
     background-color: #f6f9fc !important;
 }
 
-.detalle-carrito img {
+.detalle-carrito img , .img_carrito{
     width : 80px;
     height: auto;
 }
 
 
 #detalle_carrito_modal2 {
+    min-height: 50vh;
     max-height: 50vh;
     overflow-y: auto;
     position  : relative;
@@ -201,6 +202,7 @@ body {
 
 #detalle_carrito_modal {
     max-height: 50vh;
+    min-height: 50vh;
     overflow-y: auto;
     position  : relative;
     background: white;
@@ -229,4 +231,21 @@ body {
     bottom: 0;
 
     background: linear-gradient(to top, var(--color-foam) 1%, rgba(255, 255, 255, 0) 99%);
+}
+
+
+#icono_carro, #gif_carro {
+  transition: opacity 0.5s;
+}
+.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.5s;
+}
+.oculto {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s;
 }
