@@ -56,13 +56,8 @@ class HomeController extends Controller
         ];
         $id_bodega = $request->id_bodega;
 
-        $lista_banner = Banner::all();
-
-
+        $lista_banner = ImagenesController::obtenerUrlsDeImagenesBanner();
         $lista_categoria = $this->lista_categoria_aux();
-
-
-
 
         return view('totem.shop')->with('cliente',$cliente)->with('id_bodega',$id_bodega)->with('lista_banner',$lista_banner)->with('lista_categoria',$lista_categoria);
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\Banner;
 
 class ImagenesController extends Controller
@@ -102,6 +103,20 @@ class ImagenesController extends Controller
             'data' => $banners
         ]);
     }
+
+    public static function obtenerUrlsDeImagenesBanner(){
+        $directory = public_path('assets/img/banner');
+        $files = glob($directory . '/*');
+        
+        $imagenes = array_map(function($file) {
+            $relativePath = Str::replaceFirst(public_path() . DIRECTORY_SEPARATOR, '', $file);
+            return (object)['url' => asset($relativePath)];
+        }, $files);
+
+        return $imagenes;
+
+    }
+
         
     
     
