@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -230,11 +230,7 @@ return [
     ],
 
 
-    'AUTH' => [
-        'EMPRESA_TEST' =>env('EMPRESA_TEST'),
-        'USERNAME_TEST' =>env('USERNAME_TEST'),
-        'PASSWORD_TEST' =>env('PASSWORD_TEST'),
-        
-    ],
+    'TOKEN_API' => env('TOKEN_API'),
+    'EMPRESA' => env('EMPRESA'),
 
 ];

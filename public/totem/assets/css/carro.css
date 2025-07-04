@@ -1,0 +1,170 @@
+:root {
+    --color-espresso: #3D281c;
+    --color-body    : #bf8969;
+    --color-crema   : #DFBB96;
+    --color-foam    : #f4ece6;
+}
+
+body {
+    margin          : 0;
+    padding         : 0;
+    height          : 100%;
+    overflow        : hidden;
+    background-color: var(--color-crema);
+}
+
+.logo-circle {
+    width           : 150px;
+    height          : 150px;
+    background-color: var(--color-body);
+    border-radius   : 50%;
+    box-shadow      : 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.logo-img {
+    max-width    : 90%;
+    border-radius: 50%;
+}
+
+.logo-wrapper {
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
+    height         : 100%;
+    z-index        : 1;
+}
+
+.btn-continuar {
+    background-color: var(--color-body) !important;
+    color           : var(--color-foam) !important;
+    border-radius   : 14px !important;
+    padding         : 5px 10px 3px 10px;
+    border          : 1px solid var(--color-foam) !important;
+}
+
+.fixed-bottom {
+    z-index         : 1030;
+    background-color: var(--color-espresso);
+    color           : var(--color-foam);
+}
+
+
+
+.carrito-compra {
+    min-height               : 70vh;
+    width                    : 0;
+    position                 : fixed;
+    z-index                  : 1;
+    top                      : 10%;
+    right                    : 0;
+    background-color         : var(--color-foam);
+    overflow-x               : hidden;
+    transition               : 0.5s;
+    padding-top              : 60px;
+    border                   : 1px solid var(--color-espresso) !important;
+    border-top-left-radius   : 1rem !important;
+    border-bottom-left-radius: 1rem !important;
+
+}
+
+
+
+.carrito-compra a {
+
+    color: #000000;
+
+}
+
+
+
+.carrito-compra .closebtn {
+    position   : absolute;
+    top        : 0;
+    right      : 25px;
+    font-size  : 36px;
+    margin-left: 50px;
+}
+
+.detalle-carrito .card {
+    background-color: #f6f9fc !important;
+}
+
+.detalle-carrito img {
+    width : 80px;
+    height: auto;
+}
+
+
+
+
+#detalle_carrito_modal {
+    height    : 50vh;
+    overflow-y: auto;
+    position  : relative;
+
+}
+
+#detalle_carrito_modal {
+    height       : 50vh;
+    overflow-y   : auto;
+    position     : relative;
+    background   : white;
+    /* O el color que uses */
+    border-radius: 14px;
+}
+
+/* Agrega el efecto visual arriba y abajo */
+#detalle_carrito_modal2::before,
+#detalle_carrito_modal2::after {
+    content       : "";
+    position      : absolute;
+    left          : 0;
+    right         : 0;
+    height        : 30px;
+    z-index       : 10;
+    pointer-events: none;
+}
+
+#detalle_carrito_modal2::before {
+    top: 0;
+
+    background: linear-gradient(to bottom, var(--color-foam) 1%, rgba(255, 255, 255, 0) 99%);
+}
+
+#detalle_carrito_modal2::after {
+    bottom: 0;
+
+    background: linear-gradient(to top, var(--color-foam) 1%, rgba(255, 255, 255, 0) 99%);
+}
+
+
+.totales {
+    background-color: white;
+    color           : #000000;
+    border-radius   : 14px;
+}
+
+.payment-option img {
+    width : 200px;
+    /* Ajusta el tamaño de las imágenes según sea necesario */
+    height: 200px;
+}
+
+.btn_mercado_pago {
+
+    background-color: #ffe700 !important;
+}
+
+.btn_mercado_pago:active,
+.btn_mercado_pago:hover {
+    background-color: #e9d203 !important;
+}
+
+.btn_flow {
+    background-color: #ffffff !important;
+}
+
+.btn_flow:active,
+.btn_flow:hover {
+    background-color: #e6e5e5 !important;
+}

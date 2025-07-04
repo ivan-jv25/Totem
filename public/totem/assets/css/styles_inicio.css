@@ -1,0 +1,232 @@
+:root {
+    --color-espresso: #3D281c;
+    --color-body    : #bf8969;
+    --color-crema   : #DFBB96;
+    --color-foam    : #f4ece6;
+}
+
+body {
+    background: var(--color-crema);
+}
+
+.card {
+    background  : var(--color-foam);
+    border-color: var(--color-espresso);
+}
+
+.fixed-bottom {
+    z-index         : 1030;
+    background-color: var(--color-espresso);
+    color           : var(--color-foam);
+}
+
+
+.banner {
+    background-color: var(--color-body);
+    height          : auto;
+    /* Ajusta la altura al contenido */
+}
+
+.logo-circle {
+    width              : 150px;
+    height             : 150px;
+    /* background-color: #34C759 !important; */
+    background-color   : var(--color-body);
+    border-radius      : 50%;
+    box-shadow         : 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.logo-img {
+    max-width    : 90%;
+    border-radius: 50%;
+}
+
+.logo-wrapper {
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
+    height         : 100%;
+    z-index        : 1;
+}
+
+.circulo-categoria {
+    border-radius: 50%;
+    border       : 1px solid var(--color-espresso);
+
+
+}
+
+.card-title {
+    font-size: 1.1rem;
+    text-transform: capitalize !important;
+    white-space   : nowrap;
+    width        : 192px;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+}
+
+
+.card-producto {
+
+    /* 192.833×192.833 */
+    /* width : 100% !important; */
+    /* height: auto !important; */
+    min-width : 192px !important;
+    min-height: 192px !important;
+}
+
+
+.carousel-item {
+    width          : 816px !important;
+    height         : 300px !important;
+    object-fit     : cover;
+    object-position: center;
+
+}
+
+.btn-agregar {
+    background-color: var(--color-espresso) !important;
+    color           : var(--color-foam) !important;
+    border-radius   : 50% !important;
+    padding         : 5px 10px 3px 10px;
+
+    border: none !important;
+}
+
+.btn-agregar i {
+    font-size: 1.7rem !important;
+}
+
+.descripcion-producto {
+    font-size  : 0.7rem !important;
+    color      : #666 !important;
+    line-height: 0.8rem !important;
+}
+
+.border-top-radius {
+    border-top-left-radius : 1rem !important;
+    border-top-right-radius: 1rem !important;
+}
+
+.rounded-3 {
+
+    border-radius: 1rem;
+}
+
+.siderbar-categoria {
+    height          : 70vh;
+    overflow-y      : auto;
+    background-color: #ffffff26;
+}
+
+.container-producto {
+    height    : 70vh;
+    overflow-y: auto;
+}
+
+
+.btn-outline-light {
+    --bs-btn-color: var(--color-foam) !important;
+
+}
+
+.btn-continuar {
+    background-color: var(--color-body) !important;
+    color           : var(--color-foam) !important;
+    border-radius   : 14px !important;
+    padding         : 5px 10px 3px 10px;
+    border          : 1px solid var(--color-foam) !important;
+}
+
+
+
+
+
+
+
+
+
+.carrito-compra {
+    min-height               : 70vh;
+    width                    : 0;
+    position                 : fixed;
+    z-index                  : 1;
+    top                      : 10%;
+    right                    : 0;
+    background-color         : var(--color-foam);
+    overflow-x               : hidden;
+    transition               : 0.5s;
+    padding-top              : 60px;
+    border                   : 1px solid var(--color-espresso) !important;
+    border-top-left-radius   : 1rem !important;
+    border-bottom-left-radius: 1rem !important;
+
+}
+
+
+
+.carrito-compra a {
+
+    color: #000000;
+
+}
+
+
+
+.carrito-compra .closebtn {
+    position   : absolute;
+    top        : 0;
+    right      : 25px;
+    font-size  : 36px;
+    margin-left: 50px;
+}
+
+.detalle-carrito .card {
+    background-color: #f6f9fc !important;
+}
+
+.detalle-carrito img {
+    width : 80px;
+    height: auto;
+}
+
+
+#detalle_carrito_modal2 {
+    max-height: 50vh;
+    overflow-y: auto;
+    position  : relative;
+    background: white;
+    /* O el color que uses */
+}
+
+#detalle_carrito_modal {
+    max-height: 50vh;
+    overflow-y: auto;
+    position  : relative;
+    background: white;
+    /* O el color que uses */
+}
+
+/* Agrega el efecto visual arriba y abajo */
+#detalle_carrito_modal2::before,
+#detalle_carrito_modal2::after {
+    content       : "";
+    position      : absolute;
+    left          : 0;
+    right         : 0;
+    height        : 30px;
+    z-index       : 10;
+    pointer-events: none;
+}
+
+#detalle_carrito_modal2::before {
+    top: 0;
+
+    background: linear-gradient(to bottom, var(--color-foam) 1%, rgba(255, 255, 255, 0) 99%);
+}
+
+#detalle_carrito_modal2::after {
+    bottom: 0;
+
+    background: linear-gradient(to top, var(--color-foam) 1%, rgba(255, 255, 255, 0) 99%);
+}

@@ -27,12 +27,12 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    
     
 
     <link rel="stylesheet" href="{{asset('assets\css\all.css')}}">
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
 </head>
 <body>

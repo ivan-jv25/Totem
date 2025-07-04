@@ -39,7 +39,7 @@ class ArchivosController extends Controller
      * @throws \Illuminate\Http\Exceptions\HttpResponseException Si el archivo no es válido
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException Si hay problemas al leer el archivo
      */
-    public static function subir_archivo($file, string $filename, string $folder) {
+    public static function subir_archivo($file, string $filename, string $folder) {    
         try {
             // Asegurar que el nombre de la carpeta no tenga slashes al inicio o final
             $folder = trim($folder, '/');
@@ -180,5 +180,31 @@ class ArchivosController extends Controller
             Log::error("Error al eliminar archivo {$filename}: " . $th->getMessage());
             return false;
         }
+    }
+
+    public static function cacheImage($url){
+        
+        if (empty($url) || !filter_var($url, FILTER_VALIDATE_URL)) {
+            return asset('assets/img/sinimagen.png');
+        }
+    
+        $extension = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION) ?: 'jpg';
+        $filename = md5($url) . '.' . $extension;
+    
+        // Verificar si ya está en caché
+        if (\Cache::has("img_cache_{$filename}")) {
+            return url("/cached-image/{$filename}");
+        }
+        
+        $response = \Http::timeout(5)->get($url);
+        
+        if ($response->successful()) {
+            
+            $response = Storage::disk('public')->put("cached-image/{$filename}", $response->body());
+            \Cache::put("img_cache_{$filename}", true, now()->addMinutes(60));
+            return url("/cached-image/{$filename}");
+        }
+    
+        return asset('assets/img/sinimagen.png');
     }
 }
